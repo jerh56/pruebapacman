@@ -24,7 +24,7 @@ public class Principal {
         System.out.println("Cambio 7");
         System.out.println("Mensaje escrito por Carlos");
         System.out.println("Commit por Armando");
-        System.out.ptintln("Hola soy el diseñador");
+        System.out.println("Hola soy el diseñador");
     }
     
 }
