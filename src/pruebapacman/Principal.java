@@ -5,6 +5,8 @@
  */
 package pruebapacman;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Alumno
@@ -18,6 +20,7 @@ public class Principal {
         // TODO code application logic here
         System.out.println("Hola Mundo");
         System.out.println("Mensaje escrito por Brandon");
+        JOptionPane.showMessageDialog(null, "Hola Mundo");
     }
     
 }
