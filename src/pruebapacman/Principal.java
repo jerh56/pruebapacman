@@ -19,6 +19,7 @@ public class Principal {
     public static void main(String[] args) {
         // TODO code application logic here
         System.out.println("Hola Mundo");
+        System.out.println("Mensaje escrito por Brandon");
         JOptionPane.showMessageDialog(null, "Hola Mundo");
         System.out.println("Commit por All3nS3mpai");
     }
