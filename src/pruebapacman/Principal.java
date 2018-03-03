@@ -23,12 +23,12 @@ public class Principal {
         JOptionPane.showMessageDialog(null, "Hola Mundo");
         System.out.println("Cambio 7");
         System.out.println("Mensaje escrito por Carlos");
-        System.out.println("Commit por Armando");
+        System.out.println("Commit por Armando");        
+        System.out.println("hola por wendy");
+        System.out.println("Hola soy el diseñador");
+        System.out.println("._.");
         Persona alumno1 = new Persona("Carlos", "Contreras", 19);
         System.out.println("El alumno " + alumno1.getNombre() + " " + alumno1.getApellido() + " tiene " + alumno1.getEdad() + " años.");
-        
-        
-        
     }
     
 }
