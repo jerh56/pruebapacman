@@ -25,6 +25,8 @@ public class Principal {
         System.out.println("Mensaje escrito por Carlos");
         System.out.println("Commit por Armando");
         System.out.println("hola por wendy");
+        System.out.println("Hola soy el diseñador");
+        System.out.println("._.");
     }
     
 }
