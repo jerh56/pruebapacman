@@ -21,7 +21,7 @@ public class Principal {
         System.out.println("Hola Mundo");
         System.out.println("Mensaje escrito por Brandon");
         JOptionPane.showMessageDialog(null, "Hola Mundo");
-        System.out.println("Commit por All3nS3mpai");
+        System.out.println("Commit por Armando");
     }
     
 }
