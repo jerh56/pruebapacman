@@ -29,6 +29,7 @@ public class Principal {
         System.out.println("._.");
         Persona alumno1 = new Persona("Carlos", "Contreras", 19);
         System.out.println("El alumno " + alumno1.getNombre() + " " + alumno1.getApellido() + " tiene " + alumno1.getEdad() + " años.");
+        System.out.println("█║▌│█│║▌║││█║▌║▌║ "); // Carlos Contreras
     }
     
 }
