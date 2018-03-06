@@ -5,6 +5,7 @@
  */
 package pruebapacman;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +31,7 @@ public class Principal {
         Persona alumno1 = new Persona("Carlos", "Contreras", 19);
         System.out.println("El alumno " + alumno1.getNombre() + " " + alumno1.getApellido() + " tiene " + alumno1.getEdad() + " años.");
         System.out.println("█║▌│█│║▌║││█║▌║▌║ "); // Carlos Contreras
+        System.out.println("Este Pac-Man va directo a Steam");
     }
-    
+
 }
