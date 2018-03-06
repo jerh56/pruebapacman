@@ -32,6 +32,27 @@ public class Principal {
         System.out.println("El alumno " + alumno1.getNombre() + " " + alumno1.getApellido() + " tiene " + alumno1.getEdad() + " años.");
         System.out.println("█║▌│█│║▌║││█║▌║▌║ "); // Carlos Contreras
         System.out.println("Este Pac-Man va directo a Steam");
+        System.out.println("Alguien aquí sabe programar PIC con XC8+MPLAB X? Se agradece cualquier pista xD -Armando Payán"); 
+        
+       /*
+        Ahora, un Nyan Cat en ASCII :D
+        */ 
+       
+        System.out.println("░░░░░░░▄▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▄░░░░░░");
+        System.out.println("░░░░░░█░░▄▀▀▀▀▀▀▀▀▀▀▀▀▀▄░░█░░░░░");
+        System.out.println("░░░░░░█░█░▀░░░░░▀░░▀░░░░█░█░░░░░");
+        System.out.println("░░░░░░█░█░░░░░░░░▄▀▀▄░▀░█░█▄▀▀▄░");
+        System.out.println("█▀▀█▄░█░█░░▀░░░░░█░░░▀▄▄█▄▀░░░█░");
+        System.out.println("▀▄▄░▀██░█▄░▀░░░▄▄▀░░░░░░░░░░░░▀▄");
+        System.out.println("░░▀█▄▄█░█░░░░▄░░█░░░▄█░░░▄░▄█░░█");
+        System.out.println("░░░░░▀█░▀▄▀░░░░░█░██░▄░░▄░░▄░███");
+        System.out.println("░░░░░▄█▄░░▀▀▀▀▀▀▀▀▄░░▀▀▀▀▀▀▀░▄▀░");
+        System.out.println("░░░░█░░▄█▀█▀▀█▀▀▀▀▀▀█▀▀█▀█▀▀█░░░");
+        System.out.println("░░░░▀▀▀▀░░▀▀▀░░░░░░░░▀▀▀░░▀▀░░░░");
+        System.out.println("====================================================");
+        System.out.println("==            Espero les haya gustado             ==");
+        System.out.println("====================================================");
+        
     }
 
 }
