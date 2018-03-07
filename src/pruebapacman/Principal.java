@@ -53,6 +53,8 @@ public class Principal {
         System.out.println("==            Espero les haya gustado             ==");
         System.out.println("====================================================");
         
+        JOptionPane.showMessageDialog(null, "Adios Mundo :D");
+        
     }
 
 }
