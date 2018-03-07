@@ -46,6 +46,60 @@ public class Principal {
         
         JOptionPane.showMessageDialog(null, "Adios Mundo :D");
         
+        
+        System.out.println("░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░██████░░░░░░");
+        System.out.println("░░░░██████████░░░░");
+        System.out.println("░░░████████████░░░");
+        System.out.println("░░█████░░████░░█░░");
+        System.out.println("░░█████░░████░░█░░");
+        System.out.println("░████████████░░░█░");
+        System.out.println("░███████████░░░░█░");
+        System.out.println("░██████████░░░░░█░");
+        System.out.println("░█████████░░░░░░█░");
+        System.out.println("░█████░░░░░░░░░░█░");
+        System.out.println("░████░░░░░░░░░░░█░");
+        System.out.println("░░███░░░░██░░░░█░░");
+        System.out.println("░░███░░░░██░░░██░░");
+        System.out.println("░░░███░░░░░░░██░░░");
+        System.out.println("░░░░████░░░░██░░░░");
+        System.out.println("░░░░░░██████░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░");
+        
+        System.out.println("░░█▀░░░░░░░░░░░▀▀███████░░░░░");
+        System.out.println("░░█▌░░░░░░░░░░░░░░░▀██████░░░");
+        System.out.println("░█▌░░░░░░░░░░░░░░░░███████▌░░");
+        System.out.println("░█░░░░░░░░░░░░░░░░░████████░░");
+        System.out.println("▐▌░░░░░░░░░░░░░░░░░▀██████▌░░");
+        System.out.println("░▌▄███▌░░░░▀████▄░░░░▀████▌░░");
+        System.out.println("▐▀▀▄█▄░▌░░░▄██▄▄▄▀░░░░████▄▄░");
+        System.out.println("▐░▀░░═▐░░░░░░══░░▀░░░░▐▀░▄▀▌▌ ");
+        System.out.println("▐░░░░░▌░░░░░░░░░░░░░░░▀░▀░░▌▌ ");
+        System.out.println("▐░░░▄▀░░░▀░▌░░░░░░░░░░░░▌█░▌▌");
+        System.out.println("░▌░░▀▀▄▄▀▀▄▌▌░░░░░░░░░░▐░▀▐▐░ ");
+        System.out.println("░▌░░▌░▄▄▄▄░░░▌░░░░░░░░▐░░▀▐░░");
+        System.out.println("░█░▐▄██████▄░▐░░░░░░░░█▀▄▄▀░░");
+        System.out.println("░▐░▌▌░░░░░░▀▀▄▐░░░░░░█▌░░░░░░");
+        System.out.println("░░█░░▄▀▀▀▀▄░▄═╝▄░░░▄▀░▌░░░░░░ ");
+        System.out.println("░░░▌▐░░░░░░▌░▀▀░░▄▀░░▐░░░░░░░");
+        System.out.println("░░░▀▄░░░░░░░░░▄▀▀░░░░█░░░░░░░ ");
+        System.out.println("░░░▄█▄▄▄▄▄▄▄▀▀░░░░░░░▌▌░░░░░░");
+        System.out.println("░░▄▀▌▀▌░░░░░░░░░░░░░▄▀▀▄░░░░░");
+        System.out.println("▄▀░░▌░▀▄░░░░░░░░░░▄▀░░▌░▀▄░░░");
+        System.out.println("░░░░▌█▄▄▀▄░░░░░░▄▀░░░░▌░░░▌▄▄ ");
+        System.out.println("░░░▄▐██████▄▄░▄▀░░▄▄▄▄▌░░░░▄░ ");
+        System.out.println("░░▄▌████████▄▄▄███████▌░░░░░▄ ");
+        System.out.println("░▄▀░██████████████████▌▀▄░░░░");
+        System.out.println("▀░░░█████▀▀░░░▀███████░░░▀▄░░");
+        System.out.println("░░░░▐█▀░░░▐░░░░░▀████▌░░░░▀▄░");
+        System.out.println("░░░░░░▌░░░▐░░░░▐░░▀▀█░░░░░░░▀");
+        System.out.println("░░░░░░▐░░░░▌░░░▐░░░░░▌░░░░░░░");
+        System.out.println("░╔╗║░╔═╗░═╦═░░░░░╔╗░░╔═╗░╦═╗░");
+        System.out.println("░║║║░║░║░░║░░░░░░╠╩╗░╠═╣░║░║░");
+        System.out.println("░║╚╝░╚═╝░░║░░░░░░╚═╝░║░║░╩═╝░");
+        
+        System.out.println("Holis aca Jesús con un intento de pixel art, el segundo si fue copiado X'd");
+        
     }
 
 }
