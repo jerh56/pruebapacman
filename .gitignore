@@ -25,3 +25,8 @@ hs_err_pid*
 /nbproject/private/
 /build/
 /dist/
+
+#IntelliJ
+out/
+.idea/
+*.iml
