@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 public class Principal {
 
     public static void main(String[] args) {
+        JOptionPane.showMessageDialog(null, "Ahora existe la clase Board para el tablero");
         System.out.println("Hola Mundo");
         System.out.println("Mensaje escrito por Brandon");
         JOptionPane.showMessageDialog(null, "Hola Mundo");
