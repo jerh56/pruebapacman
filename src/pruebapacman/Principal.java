@@ -148,7 +148,8 @@ public class Principal extends JFrame {
         System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
         System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
         System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
-
+        
+        System.out.println("Ahí va otro commit.");
         EventQueue.invokeLater(() -> {
             Principal ex = new Principal();
             ex.setVisible(true);
