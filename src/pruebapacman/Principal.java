@@ -15,7 +15,7 @@ public class Principal extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    
+
     public static void main(String[] args) {
         JOptionPane.showMessageDialog(null, "Ahora existe la clase Board para el tablero");
         System.out.println("Hola Mundo");
@@ -111,6 +111,43 @@ public class Principal extends JFrame {
         System.out.println("░║╚╝░╚═╝░░║░░░░░░╚═╝░║░║░╩═╝░");
         
         System.out.println("Holis aca Jesús con un intento de pixel art, el segundo si fue copiado X'd");
+
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░╔╗║╦═║░║░░╔═░╔╦╗╔═╗╔═░║░║░");
+        System.out.println("░║║║╠░║║║░░╚═╗║║║╠═╣╚═╗╠═╣░");
+        System.out.println("░║╚╝╩═╚╩╝░░══╝║║║║░║══╝║░║░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░██░░░░░░████████░░░░░░░░");
+        System.out.println("░░░░░░░░██░░░░░░████████░░░░░░░░");
+        System.out.println("░░░░░░████░░░░░░██████████░░░░░░");
+        System.out.println("░░░░░░████░░░░░░██████████░░░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░░░████░░░░░░██████████░░░░░░");
+        System.out.println("░░░░░░████░░░░░░██████████░░░░░░");
+        System.out.println("░░░░░░░░██░░░░░░████████░░░░░░░░");
+        System.out.println("░░░░░░░░██░░░░░░████████░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
 
         EventQueue.invokeLater(() -> {
             Principal ex = new Principal();
