@@ -101,6 +101,42 @@ public class Principal {
         
         System.out.println("Holis aca Jesús con un intento de pixel art, el segundo si fue copiado X'd");
         
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░╔╗║╦═║░║░░╔═░╔╦╗╔═╗╔═░║░║░");
+        System.out.println("░║║║╠░║║║░░╚═╗║║║╠═╣╚═╗╠═╣░");
+        System.out.println("░║╚╝╩═╚╩╝░░══╝║║║║░║══╝║░║░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░██░░░░░░████████░░░░░░░░");
+        System.out.println("░░░░░░░░██░░░░░░████████░░░░░░░░");
+        System.out.println("░░░░░░████░░░░░░██████████░░░░░░");
+        System.out.println("░░░░░░████░░░░░░██████████░░░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░████████░░░░░░██████████████░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░██████░░░░░░████████████░░░░");
+        System.out.println("░░░░░░████░░░░░░██████████░░░░░░");
+        System.out.println("░░░░░░████░░░░░░██████████░░░░░░");
+        System.out.println("░░░░░░░░██░░░░░░████████░░░░░░░░");
+        System.out.println("░░░░░░░░██░░░░░░████████░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░████░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+        System.out.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
     }
 
 }
