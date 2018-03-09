@@ -2,9 +2,20 @@ package pruebapacman;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.awt.*;
 
-public class Principal {
+public class Principal extends JFrame {
 
+    public Principal() {
+        add(new Board());
+
+        setTitle("Pacman");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(380, 420);
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+    
     public static void main(String[] args) {
         JOptionPane.showMessageDialog(null, "Ahora existe la clase Board para el tablero");
         System.out.println("Hola Mundo");
@@ -100,7 +111,11 @@ public class Principal {
         System.out.println("░║╚╝░╚═╝░░║░░░░░░╚═╝░║░║░╩═╝░");
         
         System.out.println("Holis aca Jesús con un intento de pixel art, el segundo si fue copiado X'd");
-        
+
+        EventQueue.invokeLater(() -> {
+            Principal ex = new Principal();
+            ex.setVisible(true);
+        });
     }
 
 }
