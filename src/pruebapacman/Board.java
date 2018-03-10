@@ -47,18 +47,20 @@ public class Board extends JPanel implements ActionListener {
     private final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
     private final int PAC_ANIM_DELAY = 2;
     private final int PACMAN_ANIM_COUNT = 4;
-    private final int MAX_GHOSTS = 12;
+    private final int MAX_GHOSTS = 17;
     private final int PACMAN_SPEED = 6;
 
     private int pacAnimCount = PAC_ANIM_DELAY;
     private int pacAnimDir = 1;
     private int pacmanAnimPos = 0;
-    private int N_GHOSTS = 6;
+    private int N_GHOSTS = 10;
     private int pacsLeft, score;
     private int[] dx, dy;
     private int[] ghost_x, ghost_y, ghost_dx, ghost_dy, ghostSpeed;
 
     private Image ghost;
+    private Image imgGhost1;
+    private Image imgGhost2;
     private Image pacman1, pacman2up, pacman2left, pacman2right, pacman2down;
     private Image pacman3up, pacman3down, pacman3left, pacman3right;
     private Image pacman4up, pacman4down, pacman4left, pacman4right;
@@ -295,7 +297,7 @@ public class Board extends JPanel implements ActionListener {
 
             ghost_x[i] = ghost_x[i] + (ghost_dx[i] * ghostSpeed[i]);
             ghost_y[i] = ghost_y[i] + (ghost_dy[i] * ghostSpeed[i]);
-            drawGhost(g2d, ghost_x[i] + 1, ghost_y[i] + 1);
+            drawGhost(g2d, ghost_x[i] + 1, ghost_y[i] + 1, i);
 
             if (pacman_x > (ghost_x[i] - 12) && pacman_x < (ghost_x[i] + 12)
                     && pacman_y > (ghost_y[i] - 12) && pacman_y < (ghost_y[i] + 12)
@@ -306,9 +308,20 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void drawGhost(Graphics2D g2d, int x, int y) {
-
-        g2d.drawImage(ghost, x, y, this);
+    private void drawGhost(Graphics2D g2d, int x, int y, int idGhost) {
+        // se pregunta que número de fantasma es para usar una  imagen distinta
+        if (idGhost == 1){
+           g2d.drawImage(imgGhost1, x, y, this);
+        }
+        else{
+           if (idGhost == 2){
+              g2d.drawImage(imgGhost2, x, y, this);
+           }
+           else{
+              g2d.drawImage(ghost, x, y, this);
+           }
+        }
+        
     }
 
     private void movePacman() {
@@ -486,7 +499,7 @@ public class Board extends JPanel implements ActionListener {
         pacsLeft = 3;
         score = 0;
         initLevel();
-        N_GHOSTS = 6;
+        N_GHOSTS = 17;
         currentSpeed = 3;
     }
 
@@ -536,6 +549,8 @@ public class Board extends JPanel implements ActionListener {
     private void loadImages() {
 
         ghost = new ImageIcon("images/ghost.png").getImage();
+        imgGhost1 = new ImageIcon("images/ghost1.png").getImage(); // carga la imagen para este tipo de fastasma
+        imgGhost2 = new ImageIcon("images/ghost2.png").getImage();
         pacman1 = new ImageIcon("images/pacman.png").getImage();
         pacman2up = new ImageIcon("images/up1.png").getImage();
         pacman3up = new ImageIcon("images/up2.png").getImage();
