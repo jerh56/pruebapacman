@@ -160,7 +160,7 @@ public class Principal extends JFrame {
         System.out.println("Test contribuidor");
         System.out.println("Test contribuidor 2");
         System.out.println("Test contribuidor 3 - Solo autor");
-        System.out.println("Test contribuidor 4 - Solo commiter");
+        System.out.println("Test contribuidor 4 Solo commiter");
     }
 
 }
