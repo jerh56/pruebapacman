@@ -154,6 +154,9 @@ public class Principal extends JFrame {
             Principal ex = new Principal();
             ex.setVisible(true);
         });
+        
+        
+        System.out.println("los ultimos seran los primeros");
     }
 
 }
