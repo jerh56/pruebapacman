@@ -14,6 +14,7 @@ public class Principal extends JFrame {
         setSize(380, 420);
         setLocationRelativeTo(null);
         setVisible(true);
+        
     }
 
     public static void main(String[] args) {
