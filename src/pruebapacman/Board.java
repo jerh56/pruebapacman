@@ -8,7 +8,7 @@ package pruebapacman;
 /**
  *
  * Esta clase permite generar el objeto Tablero del juego
- *
+ * Probando
  * @author Juan Ernesto
  */
 import java.awt.BasicStroke;
