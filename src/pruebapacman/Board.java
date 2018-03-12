@@ -119,8 +119,8 @@ public class Board extends JPanel implements ActionListener {
         mazeColor = new Color(5, 100, 5);
         d = new Dimension(400, 400);
         // aquí se agregan los objetos fantasma al array list
-        fantasmas.add(new Fantasma(ghost,this,"Clyde"));
-        fantasmas.add(new Fantasma(ghost,this,"Blinky"));
+        fantasmas.add(new Fantasma(imgGhost1,this,"Clyde"));
+        fantasmas.add(new Fantasma(imgGhost2,this,"Blinky"));
         fantasmas.add(new Fantasma(ghost,this,"Pinky"));
         fantasmas.add(new Fantasma(ghost,this,"Inky"));
         ghost_x = new int[MAX_GHOSTS];
@@ -606,14 +606,14 @@ public class Board extends JPanel implements ActionListener {
             }
             oFantasma.setSpeed(validSpeeds[random]);
             //ghostSpeed[i] = validSpeeds[random];
-            if ("Clyde".equals(oFantasma.getName())){
-                oFantasma.setImage(imgGhost1);
-            }
-            else{
-                if ("Inky".equals(oFantasma.getName())){
-                    oFantasma.setImage(imgGhost2);
-                }
-            }
+//            if ("Clyde".equals(oFantasma.getName())){
+//                oFantasma.setImage(imgGhost1);
+//            }
+//            else{
+//                if ("Inky".equals(oFantasma.getName())){
+//                    oFantasma.setImage(imgGhost2);
+//                }
+//            }
         }
         
 //        for (i = 0; i < N_GHOSTS; i++) {
