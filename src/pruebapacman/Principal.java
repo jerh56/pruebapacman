@@ -1,7 +1,6 @@
 package pruebapacman;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.awt.*;
 
 public class Principal extends JFrame {
@@ -27,7 +26,8 @@ public class Principal extends JFrame {
         System.out.println("hola por wendy");
         System.out.println("Hola soy el diseñador");
         System.out.println("._.");
-        Persona alumno1 = new Persona("Carlos", "Contreras", 19);
+        Persona alumno1 = new Persona("Carlos", "Contreras", 19, Posicion.PRIMERO);
+        Persona alumno2 = new Persona("Jose", "Perez", 23, Posicion.ULTIMO);
         System.out.println("El alumno ");
         for(char c : ((alumno1.getNombre() + " ").concat(alumno1.getApellido())).toCharArray()) {
             System.out.println(c);
@@ -154,9 +154,9 @@ public class Principal extends JFrame {
             Principal ex = new Principal();
             ex.setVisible(true);
         });
-        
-        
+
         System.out.println("los ultimos seran los primeros");
+        if(alumno2.getPosicion() == Posicion.ULTIMO) alumno2.setPosicion(Posicion.PRIMERO);
     }
 
 }
