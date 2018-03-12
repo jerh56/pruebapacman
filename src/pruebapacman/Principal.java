@@ -17,10 +17,10 @@ public class Principal extends JFrame {
     }
 
     public static void main(String[] args) {
-        JOptionPane.showMessageDialog(null, "Ahora existe la clase Board para el tablero");
+        //JOptionPane.showMessageDialog(null, "Ahora existe la clase Board para el tablero");
         System.out.println("Hola Mundo");
         System.out.println("Mensaje escrito por Brandon");
-        JOptionPane.showMessageDialog(null, "Hola Mundo");
+        //JOptionPane.showMessageDialog(null, "Hola Mundo");
         System.out.println("Cambio 7");
         System.out.println("Mensaje escrito por Carlos");
         System.out.println("Commit por Armando");        
@@ -57,7 +57,7 @@ public class Principal extends JFrame {
         System.out.println("==            Espero les haya gustado             ==");
         System.out.println("====================================================");
         
-        JOptionPane.showMessageDialog(null, "Adios Mundo :D");
+        //JOptionPane.showMessageDialog(null, "Adios Mundo :D");
         
         
         System.out.println("░░░░░░░░░░░░░░░░░░");

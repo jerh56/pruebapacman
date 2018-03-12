@@ -11,6 +11,7 @@ package pruebapacman;
  * Probando
  * @author Juan Ernesto
  */
+import clases.Fantasma;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -53,13 +55,14 @@ public class Board extends JPanel implements ActionListener {
     private int pacAnimCount = PAC_ANIM_DELAY;
     private int pacAnimDir = 1;
     private int pacmanAnimPos = 0;
-    private int N_GHOSTS = 10;
+    private int N_GHOSTS = 4;
     private int pacsLeft, score;
     private int[] dx, dy;
     private int[] ghost_x, ghost_y, ghost_dx, ghost_dy, ghostSpeed;
+    private ArrayList <Fantasma> fantasmas = new ArrayList<Fantasma>(); // array list para crear los objetos Fantasma
 
-    private Image ghost;
-    private Image imgGhost1;
+    private Image ghost; //imagen png del fantasma
+    private Image imgGhost1; // imagen para simular varios fantasmas
     private Image imgGhost2;
     private Image pacman1, pacman2up, pacman2left, pacman2right, pacman2down;
     private Image pacman3up, pacman3down, pacman3left, pacman3right;
@@ -115,6 +118,11 @@ public class Board extends JPanel implements ActionListener {
         screenData = new short[N_BLOCKS * N_BLOCKS];
         mazeColor = new Color(5, 100, 5);
         d = new Dimension(400, 400);
+        // aquí se agregan los objetos fantasma al array list
+        fantasmas.add(new Fantasma(ghost,this,"Clyde"));
+        fantasmas.add(new Fantasma(ghost,this,"Blinky"));
+        fantasmas.add(new Fantasma(ghost,this,"Pinky"));
+        fantasmas.add(new Fantasma(ghost,this,"Inky"));
         ghost_x = new int[MAX_GHOSTS];
         ghost_dx = new int[MAX_GHOSTS];
         ghost_y = new int[MAX_GHOSTS];
@@ -241,31 +249,97 @@ public class Board extends JPanel implements ActionListener {
         int pos;
         int count;
 
+//        for (i = 0; i < N_GHOSTS; i++) {
+//            if (ghost_x[i] % BLOCK_SIZE == 0 && ghost_y[i] % BLOCK_SIZE == 0) {
+//                pos = ghost_x[i] / BLOCK_SIZE + N_BLOCKS * (int) (ghost_y[i] / BLOCK_SIZE);
+//
+//                count = 0;
+//
+//                if ((screenData[pos] & 1) == 0 && ghost_dx[i] != 1) {
+//                    dx[count] = -1;
+//                    dy[count] = 0;
+//                    count++;
+//                }
+//
+//                if ((screenData[pos] & 2) == 0 && ghost_dy[i] != 1) {
+//                    dx[count] = 0;
+//                    dy[count] = -1;
+//                    count++;
+//                }
+//
+//                if ((screenData[pos] & 4) == 0 && ghost_dx[i] != -1) {
+//                    dx[count] = 1;
+//                    dy[count] = 0;
+//                    count++;
+//                }
+//
+//                if ((screenData[pos] & 8) == 0 && ghost_dy[i] != -1) {
+//                    dx[count] = 0;
+//                    dy[count] = 1;
+//                    count++;
+//                }
+//
+//                if (count == 0) {
+//
+//                    if ((screenData[pos] & 15) == 15) {
+//                        ghost_dx[i] = 0;
+//                        ghost_dy[i] = 0;
+//                    } else {
+//                        ghost_dx[i] = -ghost_dx[i];
+//                        ghost_dy[i] = -ghost_dy[i];
+//                    }
+//
+//                } else {
+//
+//                    count = (int) (Math.random() * count);
+//
+//                    if (count > 3) {
+//                        count = 3;
+//                    }
+//
+//                    ghost_dx[i] = dx[count];
+//                    ghost_dy[i] = dy[count];
+//                }
+//
+//            }
+//
+//            ghost_x[i] = ghost_x[i] + (ghost_dx[i] * ghostSpeed[i]);
+//            ghost_y[i] = ghost_y[i] + (ghost_dy[i] * ghostSpeed[i]);
+//            drawGhost(g2d, ghost_x[i] + 1, ghost_y[i] + 1, i);
+//
+//            if (pacman_x > (ghost_x[i] - 12) && pacman_x < (ghost_x[i] + 12)
+//                    && pacman_y > (ghost_y[i] - 12) && pacman_y < (ghost_y[i] + 12)
+//                    && inGame) {
+//
+//                dying = true;
+//            }
+//        }
+        
         for (i = 0; i < N_GHOSTS; i++) {
-            if (ghost_x[i] % BLOCK_SIZE == 0 && ghost_y[i] % BLOCK_SIZE == 0) {
-                pos = ghost_x[i] / BLOCK_SIZE + N_BLOCKS * (int) (ghost_y[i] / BLOCK_SIZE);
+            if (fantasmas.get(i).getPosx() % BLOCK_SIZE == 0 && fantasmas.get(i).getPosy() % BLOCK_SIZE == 0) {
+                pos = fantasmas.get(i).getPosx() / BLOCK_SIZE + N_BLOCKS * (int) (fantasmas.get(i).getPosy() / BLOCK_SIZE);
 
                 count = 0;
 
-                if ((screenData[pos] & 1) == 0 && ghost_dx[i] != 1) {
+                if ((screenData[pos] & 1) == 0 && fantasmas.get(i).getDirx() != 1) {
                     dx[count] = -1;
                     dy[count] = 0;
                     count++;
                 }
 
-                if ((screenData[pos] & 2) == 0 && ghost_dy[i] != 1) {
+                if ((screenData[pos] & 2) == 0 && fantasmas.get(i).getDiry() != 1) {
                     dx[count] = 0;
                     dy[count] = -1;
                     count++;
                 }
 
-                if ((screenData[pos] & 4) == 0 && ghost_dx[i] != -1) {
+                if ((screenData[pos] & 4) == 0 && fantasmas.get(i).getDirx() != -1) {
                     dx[count] = 1;
                     dy[count] = 0;
                     count++;
                 }
 
-                if ((screenData[pos] & 8) == 0 && ghost_dy[i] != -1) {
+                if ((screenData[pos] & 8) == 0 && fantasmas.get(i).getDiry() != -1) {
                     dx[count] = 0;
                     dy[count] = 1;
                     count++;
@@ -274,11 +348,15 @@ public class Board extends JPanel implements ActionListener {
                 if (count == 0) {
 
                     if ((screenData[pos] & 15) == 15) {
-                        ghost_dx[i] = 0;
-                        ghost_dy[i] = 0;
+                        //ghost_dx[i] = 0;
+                        fantasmas.get(i).setDirx(0);
+                        //ghost_dy[i] = 0;
+                         fantasmas.get(i).setDiry(0);
                     } else {
-                        ghost_dx[i] = -ghost_dx[i];
-                        ghost_dy[i] = -ghost_dy[i];
+                        //ghost_dx[i] = -fantasmas.get(i).getDirx();
+                        fantasmas.get(i).setDirx(-fantasmas.get(i).getDirx());
+                        //ghost_dy[i] = -ghost_dy[i];
+                        fantasmas.get(i).setDiry(-fantasmas.get(i).getDiry());
                     }
 
                 } else {
@@ -289,39 +367,36 @@ public class Board extends JPanel implements ActionListener {
                         count = 3;
                     }
 
-                    ghost_dx[i] = dx[count];
-                    ghost_dy[i] = dy[count];
+                    //ghost_dx[i] = dx[count];
+                    fantasmas.get(i).setDirx(dx[count]);
+                    //ghost_dy[i] = dy[count];
+                    fantasmas.get(i).setDiry(dy[count]);
                 }
 
             }
 
-            ghost_x[i] = ghost_x[i] + (ghost_dx[i] * ghostSpeed[i]);
-            ghost_y[i] = ghost_y[i] + (ghost_dy[i] * ghostSpeed[i]);
-            drawGhost(g2d, ghost_x[i] + 1, ghost_y[i] + 1, i);
+            //ghost_x[i] = fantasmas.get(i).getPosx() + (ghost_dx[i] * fantasmas.get(i).getSpeed());
+            fantasmas.get(i).setPosx(fantasmas.get(i).getPosx() + (fantasmas.get(i).getDirx() * fantasmas.get(i).getSpeed()));
+            //ghost_y[i] = fantasmas.get(i).getPosy() + (ghost_dy[i] * fantasmas.get(i).getSpeed());
+            fantasmas.get(i).setPosy(fantasmas.get(i).getPosy() + (fantasmas.get(i).getDiry() * fantasmas.get(i).getSpeed()));
+            
+            //drawGhost(g2d, fantasmas.get(i).getPosx() + 1, fantasmas.get(i).getPosy() + 1, i);
+            drawGhost(g2d, i);
 
-            if (pacman_x > (ghost_x[i] - 12) && pacman_x < (ghost_x[i] + 12)
-                    && pacman_y > (ghost_y[i] - 12) && pacman_y < (ghost_y[i] + 12)
+            if (pacman_x > (fantasmas.get(i).getPosx() - 12) && pacman_x < (fantasmas.get(i).getPosx() + 12)
+                    && pacman_y > (fantasmas.get(i).getPosy() - 12) && pacman_y < (fantasmas.get(i).getPosy() + 12)
                     && inGame) {
 
                 dying = true;
             }
         }
+        
     }
 
-    private void drawGhost(Graphics2D g2d, int x, int y, int idGhost) {
-        // se pregunta que número de fantasma es para usar una  imagen distinta
-        if (idGhost == 1){
-           g2d.drawImage(imgGhost1, x, y, this);
-        }
-        else{
-           if (idGhost == 2){
-              g2d.drawImage(imgGhost2, x, y, this);
-           }
-           else{
-              g2d.drawImage(ghost, x, y, this);
-           }
-        }
-        
+    private void drawGhost(Graphics2D g2d, int i) {
+        // para dibujar el fantasma se toma la imagen del objeto
+        g2d.drawImage(fantasmas.get(i).getImage(), fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        //g2d.drawImage(ghost, x, y, this);
     }
 
     private void movePacman() {
@@ -499,7 +574,7 @@ public class Board extends JPanel implements ActionListener {
         pacsLeft = 3;
         score = 0;
         initLevel();
-        N_GHOSTS = 17;
+        N_GHOSTS = 4;
         currentSpeed = 3;
     }
 
@@ -518,22 +593,43 @@ public class Board extends JPanel implements ActionListener {
         short i;
         int dx = 1;
         int random;
-
-        for (i = 0; i < N_GHOSTS; i++) {
-
-            ghost_y[i] = 4 * BLOCK_SIZE;
-            ghost_x[i] = 4 * BLOCK_SIZE;
-            ghost_dy[i] = 0;
-            ghost_dx[i] = dx;
+         // se configuran los fantasmas del array list
+        for (Fantasma oFantasma : fantasmas) {
+            oFantasma.setPosx(4 * BLOCK_SIZE);
+            oFantasma.setPosy(4 * BLOCK_SIZE);
+            oFantasma.setDiry(0);
+            oFantasma.setDirx(dx);
             dx = -dx;
             random = (int) (Math.random() * (currentSpeed + 1));
-
             if (random > currentSpeed) {
                 random = currentSpeed;
             }
-
-            ghostSpeed[i] = validSpeeds[random];
+            oFantasma.setSpeed(validSpeeds[random]);
+            //ghostSpeed[i] = validSpeeds[random];
+            if ("Clyde".equals(oFantasma.getName())){
+                oFantasma.setImage(imgGhost1);
+            }
+            else{
+                if ("Inky".equals(oFantasma.getName())){
+                    oFantasma.setImage(imgGhost2);
+                }
+            }
         }
+        
+//        for (i = 0; i < N_GHOSTS; i++) {
+//            ghost_y[i] = 4 * BLOCK_SIZE;
+//            ghost_x[i] = 4 * BLOCK_SIZE;
+//            ghost_dy[i] = 0;
+//            ghost_dx[i] = dx;
+//            dx = -dx;
+//            random = (int) (Math.random() * (currentSpeed + 1));
+//
+//            if (random > currentSpeed) {
+//                random = currentSpeed;
+//            }
+//
+//            ghostSpeed[i] = validSpeeds[random];
+//        }
 
         pacman_x = 7 * BLOCK_SIZE;
         pacman_y = 11 * BLOCK_SIZE;
