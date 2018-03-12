@@ -1,6 +1,7 @@
 package pruebapacman;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import java.awt.*;
 
 public class Principal extends JFrame {
@@ -154,8 +155,14 @@ public class Principal extends JFrame {
             Principal ex = new Principal();
             ex.setVisible(true);
         });
-
+        
+        
         System.out.println("los ultimos seran los primeros");
+        System.out.println("Test contribuidor");
+        System.out.println("Test contribuidor 2");
+        System.out.println("Test contribuidor 3 - Solo autor");
+        System.out.println("Test contribuidor 4 Solo commiter");
+        System.out.println("Rama");
         if(alumno2.getPosicion() == Posicion.ULTIMO) alumno2.setPosicion(Posicion.PRIMERO);
     }
 
