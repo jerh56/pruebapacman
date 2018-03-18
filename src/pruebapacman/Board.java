@@ -131,7 +131,7 @@ public class Board extends JPanel implements ActionListener {
         dx = new int[4];
         dy = new int[4];
 
-        timer = new Timer(1, this);
+        timer = new Timer(40, this);
         timer.start();
     }
 
