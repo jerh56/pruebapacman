@@ -38,7 +38,7 @@ public class Board extends JPanel implements ActionListener {
     private final Font smallFont = new Font("Helvetica", Font.BOLD, 14);
 
     private Image ii;
-    private final Color dotColor = new Color(192, 192, 0);
+    private final Color dotColor = new Color(255, 255, 255);
     private Color mazeColor;
 
     private boolean inGame = false;
@@ -131,7 +131,7 @@ public class Board extends JPanel implements ActionListener {
         dx = new int[4];
         dy = new int[4];
 
-        timer = new Timer(40, this);
+        timer = new Timer(1, this);
         timer.start();
     }
 
