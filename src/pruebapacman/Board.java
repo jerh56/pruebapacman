@@ -49,7 +49,7 @@ public class Board extends JPanel implements ActionListener {
     private final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
     private final int PAC_ANIM_DELAY = 2;
     private final int PACMAN_ANIM_COUNT = 4;
-    private final int MAX_GHOSTS = 4;
+    private final int MAX_GHOSTS = 6;
     private final int PACMAN_SPEED = 6;
 
     private int pacAnimCount = PAC_ANIM_DELAY;
@@ -123,11 +123,16 @@ public class Board extends JPanel implements ActionListener {
         fantasmas.add(new Fantasma(imgGhost2,this,"Blinky"));
         fantasmas.add(new Fantasma(ghost,this,"Pinky"));
         fantasmas.add(new Fantasma(ghost,this,"Inky"));
-        ghost_x = new int[MAX_GHOSTS];
-        ghost_dx = new int[MAX_GHOSTS];
-        ghost_y = new int[MAX_GHOSTS];
-        ghost_dy = new int[MAX_GHOSTS];
-        ghostSpeed = new int[MAX_GHOSTS];
+        // esto agregará los fantasmas restantes según el nivel de dificultad
+        // hasta llegar al máximo de fantasmas
+        for (int i = 5; i <= MAX_GHOSTS; i++){
+            fantasmas.add(new Fantasma(ghost, this, "Fantasma X"));
+        }
+//        ghost_x = new int[MAX_GHOSTS];
+//        ghost_dx = new int[MAX_GHOSTS];
+//        ghost_y = new int[MAX_GHOSTS];
+//        ghost_dy = new int[MAX_GHOSTS];
+//        ghostSpeed = new int[MAX_GHOSTS];
         dx = new int[4];
         dy = new int[4];
 
