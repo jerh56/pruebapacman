@@ -521,7 +521,7 @@ public class Board extends JPanel implements ActionListener {
 
         switch (pacmanAnimPos) {
             case 1:
-                g2d.drawImage(pacman2up, pacman_x , pacman_y , this);
+                g2d.drawImage(pacman2up, pacman_x + 1 , pacman_y + 1 , this);
                 break;
             case 2:
                 g2d.drawImage(pacman3up, pacman_x + 1, pacman_y + 1, this);
