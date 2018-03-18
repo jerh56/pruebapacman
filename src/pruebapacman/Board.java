@@ -702,9 +702,8 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void loadImages() {
-
         ghost = new ImageIcon("images/ghost.png").getImage();
-        imgGhost1 = new ImageIcon("images/ghost1.png").getImage(); // carga la imagen para este tipo de fastasma
+        imgGhost1 = new ImageIcon("images/clyde.png").getImage(); // carga la imagen para este tipo de fastasma
         imgGhost2 = new ImageIcon("images/ghost2.png").getImage();
         pacman1 = new ImageIcon("images/pacman.png").getImage();
         pacman2up = new ImageIcon("images/up1.png").getImage();
