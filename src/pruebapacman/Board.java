@@ -50,7 +50,7 @@ public class Board extends JPanel implements ActionListener {
     private final int PAC_ANIM_DELAY = 1;  // la velocidad de la animación de pacman
     private final int PACMAN_ANIM_COUNT = 4;
     private final int MAX_GHOSTS = 6;
-    private final int PACMAN_SPEED = 6;
+    private final int PACMAN_SPEED = 5;
 
     private int pacAnimCount = PAC_ANIM_DELAY;
     private int pacAnimDir = 1;
