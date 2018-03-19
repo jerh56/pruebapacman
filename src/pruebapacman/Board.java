@@ -214,9 +214,11 @@ public class Board extends JPanel implements ActionListener {
     private void playGame(Graphics2D g2d){
 
         if (dying) {
+            Sound.SIREN.stop();
             Sound.PACMAN_DEATH.play();
            // timer.wait(1000);
             death();
+            Sound.SIREN.loop();
 
         } else {
 
@@ -587,7 +589,6 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void continueLevel() {
-
 //      short i;
         int dx = 1;
         int random;
@@ -717,6 +718,7 @@ public class Board extends JPanel implements ActionListener {
                     Sound.PACMAN_BEGINNING.play();
                     inGame = true;
                     initGame();
+                    Sound.SIREN.loop();
                 }
             }
         }
