@@ -107,7 +107,7 @@ public class Board extends JPanel implements ActionListener {
 //    };
 
     private final short levelData[] = {
-        19, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
+        51, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 54,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
@@ -117,11 +117,11 @@ public class Board extends JPanel implements ActionListener {
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
+        17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 32, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
-        17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
-        25, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 28
+        57, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 60
         };
     
 //        21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
@@ -478,6 +478,11 @@ public class Board extends JPanel implements ActionListener {
                 screenData[pos] = (short) (ch & 15);
                 score++;
             }
+            // si se come el cuadro de super poder
+            if ((ch & 32) != 0) {
+                screenData[pos] = (short) (ch & 15);
+                score = score + 10;
+            }
 
             if (req_dx != 0 || req_dy != 0) {
                 if (!((req_dx == -1 && req_dy == 0 && (ch & 1) != 0)
@@ -622,7 +627,13 @@ public class Board extends JPanel implements ActionListener {
                     g2d.setColor(dotColor);
                     g2d.fillRect(x + 11, y + 11, 2, 2);
                 }
-
+                
+                // Dibuja el cuadro de poder de super pacman
+                if ((screenData[i] & 32) != 0) {
+                    g2d.setColor(dotColor);
+                    g2d.fillRect(x + 5, y + 5, 8, 8);
+                }
+                
                 i++;
             }
         }
