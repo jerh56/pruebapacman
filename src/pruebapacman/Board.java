@@ -59,8 +59,10 @@ public class Board extends JPanel implements ActionListener {
     private ArrayList <Fantasma> fantasmas = new ArrayList<Fantasma>(); // array list para crear los objetos Fantasma
 
     private Image ghost; //imagen png del fantasma
-    private Image imgGhost1; // imagen para simular varios fantasmas
-    private Image imgGhost2;
+    private Image clydeGhost; 
+    private Image blinkyGhost;
+    private Image inkyGhost; 
+    private Image pinkyGhost;
     private Image[] pacmanUp = new Image[3];
     private Image[] pacmanRight = new Image[3];
     private Image[] pacmanDown = new Image[3];
@@ -173,10 +175,10 @@ public class Board extends JPanel implements ActionListener {
         mazeColor = new Color(5, 100, 5);
         d = new Dimension(400, 400); // esta variable solamente se usa para crear un rectangulo negro
         // aquí se agregan los objetos fantasma al array list
-        fantasmas.add(new Fantasma(imgGhost1,this,"Clyde"));
-        fantasmas.add(new Fantasma(imgGhost2,this,"Blinky"));
-        fantasmas.add(new Fantasma(ghost,this,"Pinky"));
-        fantasmas.add(new Fantasma(ghost,this,"Inky"));
+        fantasmas.add(new Fantasma(clydeGhost,this,"Clyde"));
+        fantasmas.add(new Fantasma(blinkyGhost,this,"Blinky"));
+        fantasmas.add(new Fantasma(pinkyGhost,this,"Pinky"));
+        fantasmas.add(new Fantasma(inkyGhost,this,"Inky"));
         // esto agregará los fantasmas restantes según el nivel de dificultad
         // hasta llegar al máximo de fantasmas
         for (int i = 5; i <= MAX_GHOSTS; i++){
@@ -673,8 +675,10 @@ public class Board extends JPanel implements ActionListener {
 
     private void loadImages() {
         ghost = new ImageIcon("images/ghost.png").getImage();
-        imgGhost1 = new ImageIcon("images/clyde.png").getImage(); // carga la imagen para este tipo de fastasma
-        imgGhost2 = new ImageIcon("images/ghost2.png").getImage();
+        clydeGhost= new ImageIcon("images/clyde v1.png").getImage(); // carga la imagen para este tipo de fastasma
+        blinkyGhost = new ImageIcon("images/blinky v1.png").getImage();
+        inkyGhost = new ImageIcon("images/inky v1.png").getImage();
+        pinkyGhost = new ImageIcon("images/pinky v1.png").getImage();
         pacman1 = new ImageIcon("images/pacman.png").getImage();
 
         for(int i = 0; i < 3; i++) {
