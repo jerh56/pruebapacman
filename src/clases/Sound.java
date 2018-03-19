@@ -13,5 +13,6 @@ import java.applet.AudioClip;
  * @author mac
  */
 public class Sound {
-    public static final AudioClip MUNCH = Applet.newAudioClip(Sound.class.getResource("pacman_munch.wav"));
+    public static final AudioClip PACMAN_MUNCH = Applet.newAudioClip(Sound.class.getResource("pacman_munch.wav"));
+    public static final AudioClip PACMAN_BEGINNING = Applet.newAudioClip(Sound.class.getResource("pacman_beginning.wav"));
 }

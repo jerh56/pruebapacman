@@ -227,7 +227,7 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void showIntroScreen(Graphics2D g2d) {
-
+        
         g2d.setColor(new Color(0, 32, 48));
         g2d.fillRect(50, SCREEN_SIZE / 2 - 30, SCREEN_SIZE - 100, 50);
         g2d.setColor(Color.white);
@@ -473,7 +473,7 @@ public class Board extends JPanel implements ActionListener {
             if ((ch & 16) != 0) {
                 screenData[pos] = (short) (ch & 15);
                 score++;
-                Sound.MUNCH.play();
+                Sound.PACMAN_MUNCH.play();
             }
             // si se come el cuadro de super poder
             if ((ch & 32) != 0) {
@@ -568,7 +568,6 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void initGame() {
-
         pacsLeft = 3;
         score = 0;
         initLevel();
@@ -714,6 +713,7 @@ public class Board extends JPanel implements ActionListener {
                 }
             } else {
                 if (key == 's' || key == 'S') {
+                    Sound.PACMAN_BEGINNING.play();
                     inGame = true;
                     initGame();
                 }
