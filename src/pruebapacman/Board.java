@@ -50,6 +50,7 @@ public class Board extends JPanel implements ActionListener {
     private int pacAnimCount = PAC_ANIM_DELAY;
     private int pacAnimDir = 1;
     private int pacmanAnimPos = 0;
+    private int pacmanAnimPosDie = 6; // para animar cuando pacman muere
     private int N_GHOSTS = 4;
     private int pacsLeft, score;
     private int[] dx, dy;
@@ -62,6 +63,7 @@ public class Board extends JPanel implements ActionListener {
     private Image[] pacmanRight = new Image[3];
     private Image[] pacmanDown = new Image[3];
     private Image[] pacmanLeft = new Image[3];
+    private Image[] pacmanLeftDie = new Image[6];
     private Image pacman1;
     
     // Descripción de la variables:
@@ -214,12 +216,16 @@ public class Board extends JPanel implements ActionListener {
     private void playGame(Graphics2D g2d){
 
         if (dying) {
-            Sound.SIREN.stop();
-            Sound.PACMAN_DEATH.play();
+            if (pacmanAnimPosDie == 6){
+                Sound.SIREN.stop();
+                Sound.PACMAN_DEATH.play();
+            }
+            pacmanAnimPosDie--;
+            drawPacmanDie(g2d);
            // timer.wait(1000);
-            death();
-            Sound.SIREN.loop();
-
+            if (pacmanAnimPosDie == 0){
+                death();
+            }
         } else {
 
             movePacman();
@@ -293,9 +299,11 @@ public class Board extends JPanel implements ActionListener {
     private void death() {
 
         pacsLeft--;
-
+        pacmanAnimPosDie = 6;
+        Sound.SIREN.loop();
         if (pacsLeft == 0) {
             inGame = false;
+            Sound.SIREN.stop();
         }
 
         continueLevel();
@@ -524,7 +532,22 @@ public class Board extends JPanel implements ActionListener {
         Image img = pacmanAnimPos == 0 ? pacman1 : pacmanImgs[pacmanAnimPos - 1];
         g2d.drawImage(img, pacman_x + 1 , pacman_y + 1 , this);
     }
+    // este método hace la animación de cuando Pacman muere
+     private void drawPacmanDie(Graphics2D g2d) {
+        Image pacmanImgs[];
+        if (view_dx == -1) {
+            pacmanImgs = pacmanLeftDie;
+        } else if (view_dx == 1) {
+            pacmanImgs = pacmanLeftDie;
+        } else if (view_dy == -1) {
+            pacmanImgs = pacmanLeftDie;
+        } else {
+            pacmanImgs = pacmanLeftDie;
+        }
 
+        Image img = pacmanImgs[pacmanAnimPosDie];
+        g2d.drawImage(img, pacman_x + 1 , pacman_y + 1 , this);
+    }
     private void drawMaze(Graphics2D g2d) {
 
         short i = 0;
@@ -604,15 +627,6 @@ public class Board extends JPanel implements ActionListener {
                 random = currentSpeed;
             }
             oFantasma.setSpeed(validSpeeds[random]);
-            //ghostSpeed[i] = validSpeeds[random];
-//            if ("Clyde".equals(oFantasma.getName())){
-//                oFantasma.setImage(imgGhost1);
-//            }
-//            else{
-//                if ("Inky".equals(oFantasma.getName())){
-//                    oFantasma.setImage(imgGhost2);
-//                }
-//            }
         }
         
 //        for (i = 0; i < N_GHOSTS; i++) {
@@ -654,6 +668,12 @@ public class Board extends JPanel implements ActionListener {
             pacmanDown[i] = new ImageIcon("images/down" + n + ".png").getImage();
             pacmanLeft[i] = new ImageIcon("images/left" + n + ".png").getImage();
         }
+     
+        for(int i = 0; i < 6; i++) {
+            int n = i+1;
+            pacmanLeftDie[i] = new ImageIcon("images/leftdie" + n + ".png").getImage();
+        }
+        
     }
 
     @Override
@@ -677,6 +697,7 @@ public class Board extends JPanel implements ActionListener {
         if (inGame) {
             playGame(g2d);
         } else {
+            Sound.SIREN.stop();
             showIntroScreen(g2d);
         }
 
@@ -718,7 +739,7 @@ public class Board extends JPanel implements ActionListener {
                     Sound.PACMAN_BEGINNING.play();
                     inGame = true;
                     initGame();
-                    Sound.SIREN.loop();
+                    Sound.SIREN.loop(); // inicia a sonar la sirena del juego
                 }
             }
         }
