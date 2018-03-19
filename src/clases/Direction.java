@@ -14,13 +14,13 @@ public enum Direction {
 
     public int getValue() { return value; }
 
-    public Direction getDirection(int value) {
+    public static Direction getDirection(int value) {
         Direction dir = null;
 
-        if(value == 1) dir = Direction.UP;
-        if(value == 2) dir = Direction.RIGHT;
-        if(value == 3) dir = Direction.DOWN;
-        if(value == 4) dir = Direction.LEFT;
+        if (value == 1) dir = Direction.UP;
+        if (value == 2) dir = Direction.RIGHT;
+        if (value == 3) dir = Direction.DOWN;
+        if (value == 4) dir = Direction.LEFT;
 
         return dir;
     }

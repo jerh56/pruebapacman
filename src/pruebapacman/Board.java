@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pruebapacman;
 
 /**
@@ -37,7 +32,6 @@ public class Board extends JPanel implements ActionListener {
     private Dimension d;
     private final Font smallFont = new Font("Helvetica", Font.BOLD, 14);
 
-    private Image ii;
     private final Color dotColor = new Color(255, 255, 255);
     private Color mazeColor;
 
@@ -58,15 +52,16 @@ public class Board extends JPanel implements ActionListener {
     private int N_GHOSTS = 4;
     private int pacsLeft, score;
     private int[] dx, dy;
-    private int[] ghost_x, ghost_y, ghost_dx, ghost_dy, ghostSpeed;
     private ArrayList <Fantasma> fantasmas = new ArrayList<Fantasma>(); // array list para crear los objetos Fantasma
 
     private Image ghost; //imagen png del fantasma
     private Image imgGhost1; // imagen para simular varios fantasmas
     private Image imgGhost2;
-    private Image pacman1, pacman2up, pacman2left, pacman2right, pacman2down;
-    private Image pacman3up, pacman3down, pacman3left, pacman3right;
-    private Image pacman4up, pacman4down, pacman4left, pacman4right;
+    private Image[] pacmanUp = new Image[3];
+    private Image[] pacmanRight = new Image[3];
+    private Image[] pacmanDown = new Image[3];
+    private Image[] pacmanLeft = new Image[3];
+    private Image pacman1;
     
     // Descripción de la variables:
     // pacman_x, pacman_y son las posiciones en los dos ejes
@@ -257,7 +252,7 @@ public class Board extends JPanel implements ActionListener {
         g.drawString(s, SCREEN_SIZE / 2 + 96, SCREEN_SIZE + 16);
 
         for (i = 0; i < pacsLeft; i++) {
-            g.drawImage(pacman3left, i * 28 + 8, SCREEN_SIZE + 1, this);
+            g.drawImage(pacmanLeft[1], i * 28 + 8, SCREEN_SIZE + 1, this);
         }
     }
 
@@ -505,88 +500,19 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void drawPacman(Graphics2D g2d) {
-
+        Image pacmanImgs[];
         if (view_dx == -1) {
-            drawPacnanLeft(g2d);
+            pacmanImgs = pacmanLeft;
         } else if (view_dx == 1) {
-            drawPacmanRight(g2d);
+            pacmanImgs = pacmanRight;
         } else if (view_dy == -1) {
-            drawPacmanUp(g2d);
+            pacmanImgs = pacmanUp;
         } else {
-            drawPacmanDown(g2d);
+            pacmanImgs = pacmanDown;
         }
-    }
 
-    private void drawPacmanUp(Graphics2D g2d) {
-
-        switch (pacmanAnimPos) {
-            case 1:
-                g2d.drawImage(pacman2up, pacman_x + 1 , pacman_y + 1 , this);
-                break;
-            case 2:
-                g2d.drawImage(pacman3up, pacman_x + 1, pacman_y + 1, this);
-                break;
-            case 3:
-                g2d.drawImage(pacman4up, pacman_x + 1, pacman_y + 1, this);
-                break;
-            default:
-                g2d.drawImage(pacman1, pacman_x + 1, pacman_y + 1, this);
-                break;
-        }
-    }
-
-    private void drawPacmanDown(Graphics2D g2d) {
-
-        switch (pacmanAnimPos) {
-            case 1:
-                g2d.drawImage(pacman2down, pacman_x + 1, pacman_y + 1, this);
-                break;
-            case 2:
-                g2d.drawImage(pacman3down, pacman_x + 1, pacman_y + 1, this);
-                break;
-            case 3:
-                g2d.drawImage(pacman4down, pacman_x + 1, pacman_y + 1, this);
-                break;
-            default:
-                g2d.drawImage(pacman1, pacman_x + 1, pacman_y + 1, this);
-                break;
-        }
-    }
-
-    private void drawPacnanLeft(Graphics2D g2d) {
-
-        switch (pacmanAnimPos) {
-            case 1:
-                g2d.drawImage(pacman2left, pacman_x + 1, pacman_y + 1, this);
-                break;
-            case 2:
-                g2d.drawImage(pacman3left, pacman_x + 1, pacman_y + 1, this);
-                break;
-            case 3:
-                g2d.drawImage(pacman4left, pacman_x + 1, pacman_y + 1, this);
-                break;
-            default:
-                g2d.drawImage(pacman1, pacman_x + 1, pacman_y + 1, this);
-                break;
-        }
-    }
-
-    private void drawPacmanRight(Graphics2D g2d) {
-
-        switch (pacmanAnimPos) {
-            case 1:
-                g2d.drawImage(pacman2right, pacman_x + 1, pacman_y + 1, this);
-                break;
-            case 2:
-                g2d.drawImage(pacman3right, pacman_x + 1, pacman_y + 1, this);
-                break;
-            case 3:
-                g2d.drawImage(pacman4right, pacman_x + 1, pacman_y + 1, this);
-                break;
-            default:
-                g2d.drawImage(pacman1, pacman_x + 1, pacman_y + 1, this);
-                break;
-        }
+        Image img = pacmanAnimPos == 0 ? pacman1 : pacmanImgs[pacmanAnimPos - 1];
+        g2d.drawImage(img, pacman_x + 1 , pacman_y + 1 , this);
     }
 
     private void drawMaze(Graphics2D g2d) {
@@ -649,7 +575,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void continueLevel() {
 
-        short i;
+//      short i;
         int dx = 1;
         int random;
          // se configuran los fantasmas del array list
@@ -706,19 +632,14 @@ public class Board extends JPanel implements ActionListener {
         imgGhost1 = new ImageIcon("images/clyde.png").getImage(); // carga la imagen para este tipo de fastasma
         imgGhost2 = new ImageIcon("images/ghost2.png").getImage();
         pacman1 = new ImageIcon("images/pacman.png").getImage();
-        pacman2up = new ImageIcon("images/up1.png").getImage();
-        pacman3up = new ImageIcon("images/up2.png").getImage();
-        pacman4up = new ImageIcon("images/up3.png").getImage();
-        pacman2down = new ImageIcon("images/down1.png").getImage();
-        pacman3down = new ImageIcon("images/down2.png").getImage();
-        pacman4down = new ImageIcon("images/down3.png").getImage();
-        pacman2left = new ImageIcon("images/left1.png").getImage();
-        pacman3left = new ImageIcon("images/left2.png").getImage();
-        pacman4left = new ImageIcon("images/left3.png").getImage();
-        pacman2right = new ImageIcon("images/right1.png").getImage();
-        pacman3right = new ImageIcon("images/right2.png").getImage();
-        pacman4right = new ImageIcon("images/right3.png").getImage();
 
+        for(int i = 0; i < 3; i++) {
+            int n = i+1;
+            pacmanUp[i] = new ImageIcon("images/up" + n + ".png").getImage();
+            pacmanRight[i] = new ImageIcon("images/right" + n + ".png").getImage();
+            pacmanDown[i] = new ImageIcon("images/down" + n + ".png").getImage();
+            pacmanLeft[i] = new ImageIcon("images/left" + n + ".png").getImage();
+        }
     }
 
     @Override
@@ -745,7 +666,6 @@ public class Board extends JPanel implements ActionListener {
             showIntroScreen(g2d);
         }
 
-        g2d.drawImage(ii, 5, 5, this);
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
     }
