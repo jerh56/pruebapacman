@@ -23,6 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -50,7 +52,7 @@ public class Board extends JPanel implements ActionListener {
     private int pacAnimCount = PAC_ANIM_DELAY;
     private int pacAnimDir = 1;
     private int pacmanAnimPos = 0;
-    private int pacmanAnimPosDie = 6; // para animar cuando pacman muere
+    private int pacmanAnimPosDie = 0; // para animar cuando pacman muere
     private int N_GHOSTS = 4;
     private int pacsLeft, score;
     private int[] dx, dy;
@@ -216,15 +218,30 @@ public class Board extends JPanel implements ActionListener {
     private void playGame(Graphics2D g2d){
 
         if (dying) {
-            if (pacmanAnimPosDie == 6){
+            if (pacmanAnimPosDie == 0){
                 Sound.SIREN.stop();
+                timer.stop();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                timer.start();
                 Sound.PACMAN_DEATH.play();
             }
-            pacmanAnimPosDie--;
+            pacmanAnimPosDie++;
             drawPacmanDie(g2d);
            // timer.wait(1000);
-            if (pacmanAnimPosDie == 0){
+            if (pacmanAnimPosDie == 5){
                 death();
+                timer.stop();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+                timer.start();
+                Sound.SIREN.loop();
             }
         } else {
 
@@ -299,8 +316,7 @@ public class Board extends JPanel implements ActionListener {
     private void death() {
 
         pacsLeft--;
-        pacmanAnimPosDie = 6;
-        Sound.SIREN.loop();
+        pacmanAnimPosDie = 0;
         if (pacsLeft == 0) {
             inGame = false;
             Sound.SIREN.stop();
