@@ -7,6 +7,7 @@ package pruebapacman;
  * @author Juan Ernesto
  */
 import clases.Fantasma;
+import clases.Sound;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -472,6 +473,7 @@ public class Board extends JPanel implements ActionListener {
             if ((ch & 16) != 0) {
                 screenData[pos] = (short) (ch & 15);
                 score++;
+                Sound.MUNCH.play();
             }
             // si se come el cuadro de super poder
             if ((ch & 32) != 0) {
