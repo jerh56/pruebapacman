@@ -211,10 +211,11 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void playGame(Graphics2D g2d) {
+    private void playGame(Graphics2D g2d){
 
         if (dying) {
-
+            Sound.PACMAN_DEATH.play();
+           // timer.wait(1000);
             death();
 
         } else {
