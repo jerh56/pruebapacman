@@ -2,8 +2,8 @@ package pruebapacman;
 
 /**
  *
- * Esta clase permite generar el objeto Tablero del juego
- * Probando
+ * Esta clase permite generar el objeto Tablero del juego Probando
+ *
  * @author Juan Ernesto
  */
 import clases.Fantasma;
@@ -29,6 +29,12 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import jssc.SerialPortEventListener;
+
+import com.panamahitek.ArduinoException;
+import com.panamahitek.PanamaHitek_Arduino;
+import jssc.SerialPortEvent;
+import jssc.SerialPortException;
 
 public class Board extends JPanel implements ActionListener {
 
@@ -49,19 +55,22 @@ public class Board extends JPanel implements ActionListener {
     private final int MAX_GHOSTS = 7;
     private final int PACMAN_SPEED = 6;
 
+    public int puntos;
+
     private int pacAnimCount = PAC_ANIM_DELAY;
     private int pacAnimDir = 1;
     private int pacmanAnimPos = 0;
     private int pacmanAnimPosDie = 0; // para animar cuando pacman muere
     private int N_GHOSTS = 4;
-    private int pacsLeft, score;
+    private int pacsLeft;
     private int[] dx, dy;
-    private ArrayList <Fantasma> fantasmas = new ArrayList<Fantasma>(); // array list para crear los objetos Fantasma
+    public int score;
+    private ArrayList<Fantasma> fantasmas = new ArrayList<Fantasma>(); // array list para crear los objetos Fantasma
 
     private Image ghost; //imagen png del fantasma
-    private Image clydeGhost; 
+    private Image clydeGhost;
     private Image blinkyGhost;
-    private Image inkyGhost; 
+    private Image inkyGhost;
     private Image pinkyGhost;
     private Image[] pacmanUp = new Image[3];
     private Image[] pacmanRight = new Image[3];
@@ -69,7 +78,9 @@ public class Board extends JPanel implements ActionListener {
     private Image[] pacmanLeft = new Image[3];
     private Image[] pacmanLeftDie = new Image[6];
     private Image pacman1;
-    
+
+    public SerialPortEventListener listener;
+
     // Descripción de la variables:
     // pacman_x, pacman_y son las posiciones en los dos ejes
     private int pacman_x, pacman_y, pacmand_x, pacmand_y;
@@ -79,7 +90,7 @@ public class Board extends JPanel implements ActionListener {
     // 22 (10110) = *┐
     // 25 (11001) = └*
     // 28 (11100) = *┘
-    
+
     // sin bolita
     // 3 (00011) = ┌
     // 6 (00110) =  ┐
@@ -89,7 +100,6 @@ public class Board extends JPanel implements ActionListener {
     // 11  (01011) = (cuadro abierto por la derecha)
     // 13  (01101) = (cuadro abierto por arriba)
     // 14  (01110) = (cuadro abierto por izq)
-    
 //    private final short levelData[] = {
 //        19, 26, 26, 26, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
 //        21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
@@ -107,15 +117,14 @@ public class Board extends JPanel implements ActionListener {
 //        1, 25, 24, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 18, 20,
 //        9, 8, 8, 8, 8, 8, 8, 8, 8, 8, 25, 24, 24, 24, 28
 //    };
-
     private final short levelData[] = {
         51, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 54,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 24, 24, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
-        17, 20,  0,  0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
-        17, 16, 18,  18,  0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
+        17, 20, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
+        17, 16, 18, 18, 0, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
@@ -124,8 +133,8 @@ public class Board extends JPanel implements ActionListener {
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
         57, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 60
-        };
-    
+    };
+
 //        21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
 //        21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
 //        21, 0, 0, 0, 17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 20,
@@ -144,7 +153,6 @@ public class Board extends JPanel implements ActionListener {
 //        1, 25, 24, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 18, 20,
 //        9, 8, 8, 8, 8, 8, 8, 8, 8, 8, 25, 24, 24, 24, 28
 //    };
-    
     private final int validSpeeds[] = {1, 2, 3, 4, 6, 8};
     private final int maxSpeed = 6;
 
@@ -157,6 +165,7 @@ public class Board extends JPanel implements ActionListener {
         loadImages();
         initVariables();
         initBoard();
+        arduinoScoreSerial();
     }
 
     private void initBoard() {
@@ -175,13 +184,13 @@ public class Board extends JPanel implements ActionListener {
         mazeColor = new Color(5, 100, 5);
         d = new Dimension(400, 400); // esta variable solamente se usa para crear un rectangulo negro
         // aquí se agregan los objetos fantasma al array list
-        fantasmas.add(new Fantasma(clydeGhost,this,"Clyde"));
-        fantasmas.add(new Fantasma(blinkyGhost,this,"Blinky"));
-        fantasmas.add(new Fantasma(pinkyGhost,this,"Pinky"));
-        fantasmas.add(new Fantasma(inkyGhost,this,"Inky"));
+        fantasmas.add(new Fantasma(clydeGhost, this, "Clyde"));
+        fantasmas.add(new Fantasma(blinkyGhost, this, "Blinky"));
+        fantasmas.add(new Fantasma(pinkyGhost, this, "Pinky"));
+        fantasmas.add(new Fantasma(inkyGhost, this, "Inky"));
         // esto agregará los fantasmas restantes según el nivel de dificultad
         // hasta llegar al máximo de fantasmas
-        for (int i = 5; i <= MAX_GHOSTS; i++){
+        for (int i = 5; i <= MAX_GHOSTS; i++) {
             fantasmas.add(new Fantasma(ghost, this, "Fantasma X"));
         }
 //        ghost_x = new int[MAX_GHOSTS];
@@ -217,10 +226,10 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void playGame(Graphics2D g2d){
+    private void playGame(Graphics2D g2d) {
 
         if (dying) {
-            if (pacmanAnimPosDie == 0){
+            if (pacmanAnimPosDie == 0) {
                 Sound.SIREN.stop();
                 timer.stop();
                 try {
@@ -233,15 +242,15 @@ public class Board extends JPanel implements ActionListener {
             }
             pacmanAnimPosDie++;
             drawPacmanDie(g2d);
-           // timer.wait(1000);
-            if (pacmanAnimPosDie == 5){
+            // timer.wait(1000);
+            if (pacmanAnimPosDie == 5) {
                 death();
                 timer.stop();
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                } 
+                }
                 timer.start();
                 Sound.SIREN.loop();
             }
@@ -255,7 +264,7 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void showIntroScreen(Graphics2D g2d) {
-        
+
         g2d.setColor(new Color(0, 32, 48));
         g2d.fillRect(50, SCREEN_SIZE / 2 - 30, SCREEN_SIZE - 100, 50);
         g2d.setColor(Color.white);
@@ -398,7 +407,6 @@ public class Board extends JPanel implements ActionListener {
 //                dying = true;
 //            }
 //        }
-        
         for (i = 0; i < N_GHOSTS; i++) {
             if (fantasmas.get(i).getPosx() % BLOCK_SIZE == 0 && fantasmas.get(i).getPosy() % BLOCK_SIZE == 0) {
                 pos = fantasmas.get(i).getPosx() / BLOCK_SIZE + N_BLOCKS * (int) (fantasmas.get(i).getPosy() / BLOCK_SIZE);
@@ -435,7 +443,7 @@ public class Board extends JPanel implements ActionListener {
                         //ghost_dx[i] = 0;
                         fantasmas.get(i).setDirx(0);
                         //ghost_dy[i] = 0;
-                         fantasmas.get(i).setDiry(0);
+                        fantasmas.get(i).setDiry(0);
                     } else {
                         //ghost_dx[i] = -fantasmas.get(i).getDirx();
                         fantasmas.get(i).setDirx(-fantasmas.get(i).getDirx());
@@ -463,7 +471,7 @@ public class Board extends JPanel implements ActionListener {
             fantasmas.get(i).setPosx(fantasmas.get(i).getPosx() + (fantasmas.get(i).getDirx() * fantasmas.get(i).getSpeed()));
             //ghost_y[i] = fantasmas.get(i).getPosy() + (ghost_dy[i] * fantasmas.get(i).getSpeed());
             fantasmas.get(i).setPosy(fantasmas.get(i).getPosy() + (fantasmas.get(i).getDiry() * fantasmas.get(i).getSpeed()));
-            
+
             //drawGhost(g2d, fantasmas.get(i).getPosx() + 1, fantasmas.get(i).getPosy() + 1, i);
             drawGhost(g2d, i);
 
@@ -474,7 +482,7 @@ public class Board extends JPanel implements ActionListener {
                 dying = true;
             }
         }
-        
+
     }
 
     private void drawGhost(Graphics2D g2d, int i) {
@@ -548,10 +556,11 @@ public class Board extends JPanel implements ActionListener {
         }
 
         Image img = pacmanAnimPos == 0 ? pacman1 : pacmanImgs[pacmanAnimPos - 1];
-        g2d.drawImage(img, pacman_x + 1 , pacman_y + 1 , this);
+        g2d.drawImage(img, pacman_x + 1, pacman_y + 1, this);
     }
+
     // este método hace la animación de cuando Pacman muere
-     private void drawPacmanDie(Graphics2D g2d) {
+    private void drawPacmanDie(Graphics2D g2d) {
         Image pacmanImgs[];
         if (view_dx == -1) {
             pacmanImgs = pacmanLeftDie;
@@ -564,8 +573,9 @@ public class Board extends JPanel implements ActionListener {
         }
 
         Image img = pacmanImgs[pacmanAnimPosDie];
-        g2d.drawImage(img, pacman_x + 1 , pacman_y + 1 , this);
+        g2d.drawImage(img, pacman_x + 1, pacman_y + 1, this);
     }
+
     private void drawMaze(Graphics2D g2d) {
 
         short i = 0;
@@ -599,13 +609,13 @@ public class Board extends JPanel implements ActionListener {
                     g2d.setColor(dotColor);
                     g2d.fillRect(x + 11, y + 11, 2, 2);
                 }
-                
+
                 // Dibuja el cuadro de poder de super pacman
                 if ((screenData[i] & 32) != 0) {
                     g2d.setColor(dotColor);
                     g2d.fillRect(x + 5, y + 5, 8, 8);
                 }
-                
+
                 i++;
             }
         }
@@ -633,7 +643,7 @@ public class Board extends JPanel implements ActionListener {
 //      short i;
         int dx = 1;
         int random;
-         // se configuran los fantasmas del array list
+        // se configuran los fantasmas del array list
         for (Fantasma oFantasma : fantasmas) {
             oFantasma.setPosx(4 * BLOCK_SIZE);
             oFantasma.setPosy(4 * BLOCK_SIZE);
@@ -646,7 +656,7 @@ public class Board extends JPanel implements ActionListener {
             }
             oFantasma.setSpeed(validSpeeds[random]);
         }
-        
+
 //        for (i = 0; i < N_GHOSTS; i++) {
 //            ghost_y[i] = 4 * BLOCK_SIZE;
 //            ghost_x[i] = 4 * BLOCK_SIZE;
@@ -661,7 +671,6 @@ public class Board extends JPanel implements ActionListener {
 //
 //            ghostSpeed[i] = validSpeeds[random];
 //        }
-
         pacman_x = 7 * BLOCK_SIZE;
         pacman_y = 11 * BLOCK_SIZE;
         pacmand_x = 0;
@@ -675,25 +684,25 @@ public class Board extends JPanel implements ActionListener {
 
     private void loadImages() {
         ghost = new ImageIcon("images/ghost.png").getImage();
-        clydeGhost= new ImageIcon("images/clyde v1.png").getImage(); // carga la imagen para este tipo de fastasma
+        clydeGhost = new ImageIcon("images/clyde v1.png").getImage(); // carga la imagen para este tipo de fastasma
         blinkyGhost = new ImageIcon("images/blinky v1.png").getImage();
         inkyGhost = new ImageIcon("images/inky v1.png").getImage();
         pinkyGhost = new ImageIcon("images/pinky v1.png").getImage();
         pacman1 = new ImageIcon("images/pacman.png").getImage();
 
-        for(int i = 0; i < 3; i++) {
-            int n = i+1;
+        for (int i = 0; i < 3; i++) {
+            int n = i + 1;
             pacmanUp[i] = new ImageIcon("images/up" + n + ".png").getImage();
             pacmanRight[i] = new ImageIcon("images/right" + n + ".png").getImage();
             pacmanDown[i] = new ImageIcon("images/down" + n + ".png").getImage();
             pacmanLeft[i] = new ImageIcon("images/left" + n + ".png").getImage();
         }
-     
-        for(int i = 0; i < 6; i++) {
-            int n = i+1;
+
+        for (int i = 0; i < 6; i++) {
+            int n = i + 1;
             pacmanLeftDie[i] = new ImageIcon("images/leftdie" + n + ".png").getImage();
         }
-        
+
     }
 
     @Override
@@ -778,8 +787,48 @@ public class Board extends JPanel implements ActionListener {
     }
 
     @Override
+
     public void actionPerformed(ActionEvent e) {
 
         repaint();
     }
+
+    public void arduinoScoreSerial() {
+
+        puntos = score;
+
+        PanamaHitek_Arduino ino = new PanamaHitek_Arduino();
+        this.listener = new SerialPortEventListener() {
+            @Override
+            public void serialEvent(SerialPortEvent serialPortEvent) {
+                try {
+                    if (ino.isMessageAvailable()) {
+                        ino.sendByte(puntos);
+                    }
+                } catch (SerialPortException ex) {
+                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ArduinoException ex) {
+                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        ;
+        };
+        
+         try {
+            ino.arduinoRXTX("COM4", 9600, listener);
+        } catch (ArduinoException ex) {
+            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (puntos >= 0) {
+            try {
+                ino.sendByte(puntos);
+            } catch (ArduinoException ex) {
+                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SerialPortException ex) {
+                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
 }
