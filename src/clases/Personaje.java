@@ -13,7 +13,7 @@ import pruebapacman.Board;
  * @author Juan Ernesto Ramos
  */
 public class Personaje {
-    private Image imagen;
+    private Image imagenes[];
     private Board tablero;
     private String name;
     private int posx;
@@ -21,8 +21,8 @@ public class Personaje {
     private int posy;
     private int diry;
     private int speed;
-    public Personaje(Image imagen, Board tablero, String name){
-        this.imagen = imagen;
+    public Personaje(Image[] imagenes, Board tablero, String name){
+        this.imagenes = imagenes;
         this.tablero = tablero;
         this.name = name;
     }
@@ -56,11 +56,11 @@ public class Personaje {
     public int getSpeed(){
         return this.speed;
     }
-    public Image getImage(){
-        return this.imagen;
+    public Image[] getImages(){
+        return this.imagenes;
     }
-    public void setImage(Image imagen){
-        this.imagen = imagen;
+    public void setImages(Image[] imagenes){
+        this.imagenes = imagenes;
     }
     public String getName(){
         return this.name;

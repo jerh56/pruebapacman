@@ -14,8 +14,8 @@ import pruebapacman.Board;
  */
 public class Fantasma extends Personaje{
     
-    public Fantasma(Image imagen, Board tablero, String name) {
-        super(imagen, tablero, name);
+    public Fantasma(Image[] imagenes, Board tablero, String name) {
+        super(imagenes, tablero, name);
     }
     
 }

@@ -7,6 +7,7 @@ package pruebapacman;
  * @author Juan Ernesto
  */
 import clases.Fantasma;
+import clases.GhostType;
 import clases.Sound;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -41,28 +42,34 @@ public class Board extends JPanel implements ActionListener {
     private boolean inGame = false;
     private boolean dying = false;
 
+    // TODO: Arreglar este desorden?
     private final int BLOCK_SIZE = 24;
     private final int N_BLOCKS = 15;
     private final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
-    private final int PAC_ANIM_DELAY = 1;  // la velocidad de la animación de pacman
+    private final int PAC_ANIM_DELAY = 1;  // la cantidad de retraso en las animaciones de pacman
     private final int PACMAN_ANIM_COUNT = 4;
-    private final int MAX_GHOSTS = 7;
+    private final int GHOSTS_ANIM_DELAY = 5;  // la cantidad de retraso en las animaciones de fantasmas
+    private final int GHOSTS_ANIM_COUNT = 2;
+    private final int MAX_GHOSTS = 4; // TODO: Aumentar la cantidad de fantasmas - Simplificar animaciones
     private final int PACMAN_SPEED = 6;
 
     private int pacAnimCount = PAC_ANIM_DELAY;
+    private int ghostsAnimCount = GHOSTS_ANIM_COUNT;
     private int pacAnimDir = 1;
+    private int ghostsAnimDir = 1;
     private int pacmanAnimPos = 0;
     private int pacmanAnimPosDie = 0; // para animar cuando pacman muere
+    private int ghostsAnimPos = 0; // Para animar los fantasmas
     private int N_GHOSTS = 4;
     private int pacsLeft, score;
     private int[] dx, dy;
-    private ArrayList <Fantasma> fantasmas = new ArrayList<Fantasma>(); // array list para crear los objetos Fantasma
+    private ArrayList <Fantasma> fantasmas = new ArrayList<>(); // array list para crear los objetos Fantasma
 
-    private Image ghost; //imagen png del fantasma
-    private Image clydeGhost; 
-    private Image blinkyGhost;
-    private Image inkyGhost; 
-    private Image pinkyGhost;
+//    private Image ghost; //imagen png del fantasma
+//    private Image clydeGhost;
+//    private Image blinkyGhost;
+//    private Image inkyGhost;
+//    private Image pinkyGhost;
     private Image[] pacmanUp = new Image[3];
     private Image[] pacmanRight = new Image[3];
     private Image[] pacmanDown = new Image[3];
@@ -178,15 +185,24 @@ public class Board extends JPanel implements ActionListener {
         mazeColor = new Color(5, 100, 5);
         d = new Dimension(400, 400); // esta variable solamente se usa para crear un rectangulo negro
         // aquí se agregan los objetos fantasma al array list
-        fantasmas.add(new Fantasma(clydeGhost,this,"Clyde"));
-        fantasmas.add(new Fantasma(blinkyGhost,this,"Blinky"));
-        fantasmas.add(new Fantasma(pinkyGhost,this,"Pinky"));
-        fantasmas.add(new Fantasma(inkyGhost,this,"Inky"));
+        fantasmas.add(new Fantasma(new Image[2],this,"Clyde"));
+        fantasmas.add(new Fantasma(new Image[2],this,"Blinky"));
+        fantasmas.add(new Fantasma(new Image[2],this,"Pinky"));
+        fantasmas.add(new Fantasma(new Image[2],this,"Inky"));
+
+        // Cargar las 2 imagenes que pertenecen a cada fantasma
+        int ghostPos = 0;
+
+        for(GhostType ghost : GhostType.values()) {
+            Image images[] = fantasmas.get(ghostPos).getImages();
+            String name = ghost.name().toLowerCase();
+            images[0] = new ImageIcon("images/" + name + " v1.png").getImage();
+            images[1] = new ImageIcon("images/" + name + " v2.png").getImage();
+
+            fantasmas.get(ghostPos++).setImages(images);
+        }
         // esto agregará los fantasmas restantes según el nivel de dificultad
         // hasta llegar al máximo de fantasmas
-        for (int i = 5; i <= MAX_GHOSTS; i++){
-            fantasmas.add(new Fantasma(ghost, this, "Fantasma X"));
-        }
 //        ghost_x = new int[MAX_GHOSTS];
 //        ghost_dx = new int[MAX_GHOSTS];
 //        ghost_y = new int[MAX_GHOSTS];
@@ -206,7 +222,7 @@ public class Board extends JPanel implements ActionListener {
         initGame();
     }
 
-    private void doAnim() {
+    private void doAnimPacman() {
 
         pacAnimCount--;
 
@@ -218,6 +234,15 @@ public class Board extends JPanel implements ActionListener {
                 pacAnimDir = -pacAnimDir;
             }
         }
+
+//        if (pacAnimCount <= 0) {
+//            pacAnimCount = PAC_ANIM_DELAY;
+//            pacmanAnimPos = pacmanAnimPos + pacAnimDir;
+//
+//            if (pacmanAnimPos == (PACMAN_ANIM_COUNT - 1) || pacmanAnimPos == 0) {
+//                pacAnimDir = -pacAnimDir;
+//            }
+//        }
     }
 
     private void playGame(Graphics2D g2d){
@@ -244,7 +269,7 @@ public class Board extends JPanel implements ActionListener {
                     Thread.sleep(2000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                } 
+                }
                 timer.start();
                 Sound.SIREN.loop();
             }
@@ -334,7 +359,20 @@ public class Board extends JPanel implements ActionListener {
 
         short i;
         int pos;
-        int count;        
+        int count;
+
+        // Para enviarle el frame actual a la funcion moveGhost
+        ghostsAnimCount--;
+
+        if (ghostsAnimCount <= 0) {
+            ghostsAnimCount = GHOSTS_ANIM_DELAY;
+            ghostsAnimPos = ghostsAnimPos + ghostsAnimDir;
+
+            if (ghostsAnimPos == (GHOSTS_ANIM_COUNT - 1) || ghostsAnimPos == 0) {
+                ghostsAnimDir = -ghostsAnimDir;
+            }
+        }
+
         for (i = 0; i < N_GHOSTS; i++) {
             if (fantasmas.get(i).getPosx() % BLOCK_SIZE == 0 && fantasmas.get(i).getPosy() % BLOCK_SIZE == 0) {
                 pos = fantasmas.get(i).getPosx() / BLOCK_SIZE + N_BLOCKS * (int) (fantasmas.get(i).getPosy() / BLOCK_SIZE);
@@ -401,7 +439,7 @@ public class Board extends JPanel implements ActionListener {
             fantasmas.get(i).setPosy(fantasmas.get(i).getPosy() + (fantasmas.get(i).getDiry() * fantasmas.get(i).getSpeed()));
             
             //drawGhost(g2d, fantasmas.get(i).getPosx() + 1, fantasmas.get(i).getPosy() + 1, i);
-            drawGhost(g2d, i);
+            drawGhost(g2d, i, ghostsAnimPos);
 
             if (pacman_x > (fantasmas.get(i).getPosx() - 12) && pacman_x < (fantasmas.get(i).getPosx() + 12)
                     && pacman_y > (fantasmas.get(i).getPosy() - 12) && pacman_y < (fantasmas.get(i).getPosy() + 12)
@@ -413,9 +451,9 @@ public class Board extends JPanel implements ActionListener {
         
     }
 
-    private void drawGhost(Graphics2D g2d, int i) {
+    private void drawGhost(Graphics2D g2d, int i, int frame) {
         // para dibujar el fantasma se toma la imagen del objeto
-        g2d.drawImage(fantasmas.get(i).getImage(), fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        g2d.drawImage(fantasmas.get(i).getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
         //g2d.drawImage(ghost, x, y, this);
     }
 
@@ -611,11 +649,11 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void loadImages() {
-        ghost = new ImageIcon("images/ghost.png").getImage();
-        clydeGhost= new ImageIcon("images/clyde v1.png").getImage(); // carga la imagen para este tipo de fastasma
-        blinkyGhost = new ImageIcon("images/blinky v1.png").getImage();
-        inkyGhost = new ImageIcon("images/inky v1.png").getImage();
-        pinkyGhost = new ImageIcon("images/pinky v1.png").getImage();
+//        ghost = new ImageIcon("images/ghost.png").getImage();
+//        clydeGhost= new ImageIcon("images/clyde v1.png").getImage(); // carga la imagen para este tipo de fastasma
+//        blinkyGhost = new ImageIcon("images/blinky v1.png").getImage();
+//        inkyGhost = new ImageIcon("images/inky v1.png").getImage();
+//        pinkyGhost = new ImageIcon("images/pinky v1.png").getImage();
         pacman1 = new ImageIcon("images/pacman.png").getImage();
 
         for(int i = 0; i < 3; i++) {
@@ -649,7 +687,7 @@ public class Board extends JPanel implements ActionListener {
 
         drawMaze(g2d);
         drawScore(g2d);
-        doAnim();
+        doAnimPacman();
 
         if (inGame) {
             playGame(g2d);
