@@ -40,6 +40,7 @@ public class Board extends JPanel implements ActionListener {
     private Color mazeColor;
 
     private boolean inGame = false;
+    private boolean eatingGhost = false;
     private boolean dying = false;
 
     // TODO: Arreglar este desorden?
@@ -52,7 +53,8 @@ public class Board extends JPanel implements ActionListener {
     private final int GHOSTS_ANIM_COUNT = 2;
     private final int MAX_GHOSTS = 4; // TODO: Aumentar la cantidad de fantasmas - Simplificar animaciones
     private final int PACMAN_SPEED = 6;
-
+    
+    private int superPacmanCount = 0;
     private int pacAnimCount = PAC_ANIM_DELAY;
     private int ghostsAnimCount = GHOSTS_ANIM_COUNT;
     private int pacAnimDir = 1;
@@ -210,7 +212,7 @@ public class Board extends JPanel implements ActionListener {
 //        ghostSpeed = new int[MAX_GHOSTS];
         dx = new int[4];
         dy = new int[4];
-
+        
         timer = new Timer(40, this);
         timer.start();
     }
@@ -376,33 +378,64 @@ public class Board extends JPanel implements ActionListener {
         for (i = 0; i < N_GHOSTS; i++) {
             if (fantasmas.get(i).getPosx() % BLOCK_SIZE == 0 && fantasmas.get(i).getPosy() % BLOCK_SIZE == 0) {
                 pos = fantasmas.get(i).getPosx() / BLOCK_SIZE + N_BLOCKS * (int) (fantasmas.get(i).getPosy() / BLOCK_SIZE);
-
                 count = 0;
+                if (eatingGhost) {
+                    if ((screenData[pos] & 1) == 0 && fantasmas.get(i).getDirx() != 1 && fantasmas.get(i).getPosx() <= pacman_x) {
+                        dx[count] = -1;
+                        dy[count] = 0;
+                        count++;
+                    }
 
-                if ((screenData[pos] & 1) == 0 && fantasmas.get(i).getDirx() != 1) {
-                    dx[count] = -1;
-                    dy[count] = 0;
-                    count++;
+                    if ((screenData[pos] & 2) == 0 && fantasmas.get(i).getDiry() != 1 && fantasmas.get(i).getPosy() <= pacman_y) {
+                        dx[count] = 0;
+                        dy[count] = -1;
+                        count++;
+                    }
+
+                    if ((screenData[pos] & 4) == 0 && fantasmas.get(i).getDirx() != -1 && fantasmas.get(i).getPosx() >= pacman_x) {
+                        dx[count] = 1;
+                        dy[count] = 0;
+                        count++;
+                    }
+
+                    if ((screenData[pos] & 8) == 0 && fantasmas.get(i).getDiry() != -1 && fantasmas.get(i).getPosy() >= pacman_y) {
+                        dx[count] = 0;
+                        dy[count] = 1;
+                        count++;
+                    }
+                    superPacmanCount++;
+                    if (superPacmanCount > 50){
+                        eatingGhost = false;
+                        superPacmanCount = 0;
+                        Sound.GHOST_SCARED.stop();
+                    }
+
+                } else {
+                    if ((screenData[pos] & 1) == 0 && fantasmas.get(i).getDirx() != 1) {
+                        dx[count] = -1;
+                        dy[count] = 0;
+                        count++;
+                    }
+
+                    if ((screenData[pos] & 2) == 0 && fantasmas.get(i).getDiry() != 1) {
+                        dx[count] = 0;
+                        dy[count] = -1;
+                        count++;
+                    }
+
+                    if ((screenData[pos] & 4) == 0 && fantasmas.get(i).getDirx() != -1) {
+                        dx[count] = 1;
+                        dy[count] = 0;
+                        count++;
+                    }
+
+                    if ((screenData[pos] & 8) == 0 && fantasmas.get(i).getDiry() != -1) {
+                        dx[count] = 0;
+                        dy[count] = 1;
+                        count++;
+                    }
                 }
-
-                if ((screenData[pos] & 2) == 0 && fantasmas.get(i).getDiry() != 1) {
-                    dx[count] = 0;
-                    dy[count] = -1;
-                    count++;
-                }
-
-                if ((screenData[pos] & 4) == 0 && fantasmas.get(i).getDirx() != -1) {
-                    dx[count] = 1;
-                    dy[count] = 0;
-                    count++;
-                }
-
-                if ((screenData[pos] & 8) == 0 && fantasmas.get(i).getDiry() != -1) {
-                    dx[count] = 0;
-                    dy[count] = 1;
-                    count++;
-                }
-
+             
                 if (count == 0) {
 
                     if ((screenData[pos] & 15) == 15) {
@@ -443,9 +476,27 @@ public class Board extends JPanel implements ActionListener {
 
             if (pacman_x > (fantasmas.get(i).getPosx() - 12) && pacman_x < (fantasmas.get(i).getPosx() + 12)
                     && pacman_y > (fantasmas.get(i).getPosy() - 12) && pacman_y < (fantasmas.get(i).getPosy() + 12)
-                    && inGame) {
+                    && inGame && eatingGhost == false) {
 
                 dying = true;
+            }
+            if (pacman_x > (fantasmas.get(i).getPosx() - 12) && pacman_x < (fantasmas.get(i).getPosx() + 12)
+                    && pacman_y > (fantasmas.get(i).getPosy() - 12) && pacman_y < (fantasmas.get(i).getPosy() + 12)
+                    && inGame && eatingGhost == true && fantasmas.get(i).getEating() == false ) {
+
+                timer.stop();
+                Sound.GHOST_SCARED.stop();
+                Sound.GHOST_EATEN.play();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                timer.start();
+                fantasmas.get(i).setEating(true);
+                Sound.GHOST_SCARED.loop();
+                
+                
             }
         }
         
@@ -482,6 +533,8 @@ public class Board extends JPanel implements ActionListener {
             if ((ch & 32) != 0) {
                 screenData[pos] = (short) (ch & 15);
                 score = score + 10;
+                eatingGhost = true;
+                Sound.GHOST_SCARED.loop();
             }
 
             if (req_dx != 0 || req_dy != 0) {
@@ -646,6 +699,8 @@ public class Board extends JPanel implements ActionListener {
         view_dx = -1;
         view_dy = 0;
         dying = false;
+        eatingGhost = false; // indica si pacman puede comer fantasmas
+        superPacmanCount = 0;
     }
 
     private void loadImages() {
