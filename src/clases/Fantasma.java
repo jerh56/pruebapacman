@@ -13,9 +13,17 @@ import pruebapacman.Board;
  * @author mac
  */
 public class Fantasma extends Personaje{
+    private boolean eating;
     
     public Fantasma(Image[] imagenes, Board tablero, String name) {
         super(imagenes, tablero, name);
+        this.eating = false;
+    }
+    public void setEating(boolean eating){
+        this.eating = eating;
+    }
+    public boolean getEating(){
+        return this.eating;
     }
     
 }
