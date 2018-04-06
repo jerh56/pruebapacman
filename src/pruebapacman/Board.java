@@ -50,6 +50,7 @@ public class Board extends JPanel implements ActionListener {
     private final int PACMAN_SPEED = 6;
 
     private int superPacmanCount = 0;
+    private int pacmanAnimPoints = 0;
     private boolean dirChanged = false;
     private final int POINTS_EAT_GHOST = 200;
 
@@ -512,8 +513,8 @@ public class Board extends JPanel implements ActionListener {
 
     private void drawGhost(Graphics2D g2d, int i, int frame) {
         // para dibujar el fantasma se toma la imagen del objeto
-        //g2d.drawImage(fantasmas.get(i).getCurrentAnimation().getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
-        g2d.drawImage(fantasmas.get(i).getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);  
+        g2d.drawImage(fantasmas.get(i).getCurrentAnimation().getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        //g2d.drawImage(fantasmas.get(i).getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);  
       //g2d.drawImage(ghost, x, y, this);
     }
     private void drawEatenGhost(Graphics2D g2d, int i) {
@@ -596,9 +597,10 @@ public class Board extends JPanel implements ActionListener {
     // dibujar a pacman
     private void drawPacman(Graphics2D g2d) {
         //TODO: Recordar el frame en que se quedo la animacion
+       if (whatEatGhost == -1) { 
         if(dirChanged) {
             int frame = pacman.getCurrentAnimation().getCurrentFrame();
-          if (whatEatGhost == -1) { 
+          
             if (view_dx == -1) {
                 pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_NORMAL_LEFT));
             } else if (view_dx == 1) {
@@ -615,7 +617,7 @@ public class Board extends JPanel implements ActionListener {
        else{
             if (pacmanAnimPoints <= 6){
                 pacmanAnimPoints++;
-                g2d.drawString(String.valueOf(acumPointsEat), pacman_x+2, pacman_y+14);
+                g2d.drawString(String.valueOf(acumPointsEat), pacman.getPosx() + 2, pacman.getPosy() + 14);
             }
             else{
                 pacmanAnimPoints = 0;
