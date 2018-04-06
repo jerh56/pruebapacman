@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package clases;
 
-import java.awt.Image;
 import pruebapacman.Board;
 
 /**
@@ -13,20 +7,24 @@ import pruebapacman.Board;
  * @author Juan Ernesto Ramos
  */
 public class Personaje {
-    private Image imagenes[];
     private Board tablero;
     private String name;
+    private Animation currentAnimation;
     private int posx;
     private int dirx;
     private int posy;
     private int diry;
     private int speed;
     private boolean visible;
-    public Personaje(Image[] imagenes, Board tablero, String name){
-        this.imagenes = imagenes;
+    public Personaje(Animation animation, Board tablero, String name){
+        this.currentAnimation = animation;
         this.tablero = tablero;
         this.name = name;
         this.visible = true;
+    }
+
+    public void update() {
+        this.currentAnimation.update();
     }
     public void setPosx(int posx){
         this.posx = posx;
@@ -42,6 +40,9 @@ public class Personaje {
     }
     public void setSpeed(int speed){
         this.speed = speed;
+    }
+    public void setCurrentAnimation(Animation animation) {
+        this.currentAnimation = animation;
     }
     public void setVisible(boolean visible){
         this.visible = visible;
@@ -61,14 +62,11 @@ public class Personaje {
     public int getSpeed(){
         return this.speed;
     }
+    public Animation getCurrentAnimation() {
+        return this.currentAnimation;
+    }
     public boolean getVisible(){
         return this.visible;
-    }
-    public Image[] getImages(){
-        return this.imagenes;
-    }
-    public void setImages(Image[] imagenes){
-        this.imagenes = imagenes;
     }
     public String getName(){
         return this.name;

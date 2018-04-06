@@ -6,9 +6,8 @@ package pruebapacman;
  * Probando
  * @author Juan Ernesto
  */
-import clases.Fantasma;
-import clases.GhostType;
-import clases.Sound;
+import clases.*;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -44,57 +43,57 @@ public class Board extends JPanel implements ActionListener {
     private boolean dying = false;
     
 
-    // TODO: Arreglar este desorden?
     private final int BLOCK_SIZE = 24;
     private final int N_BLOCKS = 15;
     private final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
-    private final int PAC_ANIM_DELAY = 1;  // la cantidad de retraso en las animaciones de pacman
-    private final int PACMAN_ANIM_COUNT = 4;
-    private final int GHOSTS_ANIM_DELAY = 5;  // la cantidad de retraso en las animaciones de fantasmas
-    private final int GHOSTS_ANIM_COUNT = 2;
-    private final int MAX_GHOSTS = 4; // TODO: Aumentar la cantidad de fantasmas - Simplificar animaciones
+    private final int MAX_GHOSTS = 4; // TODO: Aumentar la cantidad de fantasmas
     private final int PACMAN_SPEED = 6;
-    private final int POINTS_EAT_GHOST = 200;
-    
+
     private int superPacmanCount = 0;
-    private int pacAnimCount = PAC_ANIM_DELAY;
-    private int ghostsAnimCount = GHOSTS_ANIM_COUNT;
-    private int pacAnimDir = 1;
-    private int ghostsAnimDir = 1;
-    private int pacmanAnimPos = 0;
-    private int pacmanAnimPosDie = 0; // para animar cuando pacman muere
-    private int pacmanAnimPoints = 0;
-    private int ghostsAnimPos = 0; // Para animar los fantasmas
+    private boolean dirChanged = false;
+    private final int POINTS_EAT_GHOST = 200;
+
+    //private int pacAnimCount = PAC_ANIM_DELAY;
+    //private int ghostsAnimCount = GHOSTS_ANIM_COUNT;
+    //private int pacAnimDir = 1;
+    //private int ghostsAnimDir = 1;
+    //private int pacmanAnimPos = 0;
+    //private int pacmanAnimPosDie = 0; // para animar cuando pacman muere
+    //private int pacmanAnimPoints = 0;
+    //private int ghostsAnimPos = 0; // Para animar los fantasmas
+
     private int N_GHOSTS = 4;
-    private int pacsLeft, score;
+    private int score;
     private int[] dx, dy;
+    private Pacman pacman;
     private ArrayList <Fantasma> fantasmas = new ArrayList<>(); // array list para crear los objetos Fantasma
     private int acumPointsEat = 0;
     private int whatEatGhost = -1;
-//    private Image ghost; //imagen png del fantasma
-//    private Image clydeGhost;
-//    private Image blinkyGhost;
-//    private Image inkyGhost;
-//    private Image pinkyGhost;
-    private Image[] pacmanUp = new Image[3];
-    private Image[] pacmanRight = new Image[3];
-    private Image[] pacmanDown = new Image[3];
-    private Image[] pacmanLeft = new Image[3];
-    private Image[] pacmanLeftDie = new Image[6];
-    private Image pacman1;
+/////    private Image ghost; //imagen png del fantasma
+////    private Image clydeGhost;
+////    private Image blinkyGhost;
+////    private Image inkyGhost;
+////    private Image pinkyGhost;
+//    private Image[] pacmanUp = new Image[3];
+//    private Image[] pacmanRight = new Image[3];
+//    private Image[] pacmanDown = new Image[3];
+//    private Image[] pacmanLeft = new Image[3];
+//    private Image[] pacmanLeftDie = new Image[6];
+//    private Image pacman1;
+
     private Image ghostEyes;
     private Image ghostScared;
-    
+
     // Descripción de la variables:
-    // pacman_x, pacman_y son las posiciones en los dos ejes
-    private int pacman_x, pacman_y, pacmand_x, pacmand_y;
+    // pacman.getPosx(), pacman.getPosy() son las posiciones en los dos ejes
+    // pacman.getDirx(), pacman.getDiry() es la aceleracion en los dos ejes
     private int req_dx, req_dy, view_dx, view_dy;
     // con bolita
     // 19 (10011) = ┌*
     // 22 (10110) = *┐
     // 25 (11001) = └*
     // 28 (11100) = *┘
-    
+
     // sin bolita
     // 1 (00001) = linea izq
     // 2 (00010) = Linea superior
@@ -108,7 +107,7 @@ public class Board extends JPanel implements ActionListener {
     // 11  (01011) = (cuadro abierto por la derecha)
     // 13  (01101) = (cuadro abierto por arriba)
     // 14  (01110) = (cuadro abierto por izq)
-    
+
 //    private final short levelData[] = {
 //        19, 26, 26, 26, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
 //        21, 0, 0, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
@@ -144,14 +143,14 @@ public class Board extends JPanel implements ActionListener {
         21,  0,  0,  0,  0,  0, 21,  0, 21,  0,  0,  0,  0,  0, 21,
         25, 26, 26, 26, 26, 26, 24, 26, 24, 26, 26, 26, 26, 26, 28
         };
-    
+
     private final short levelData2[] = {
 //      1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
 /*1*/   51, 10, 18, 26, 26, 26, 26, 18, 26, 26, 26, 26, 18, 26, 54,
 /*2*/   21, 0,  21, 0,  0,  0,  0,  21, 0,  0,  0,  0,  21, 0,  21,
 /*3*/   17, 26, 16, 26, 26, 18, 26, 24, 26, 18, 26, 26, 16, 26, 20,
 /*4*/   21, 0,  21, 0,  0,  21, 0,  0,  0,  21, 0,  0,  21, 0,  21,
-/*5*/   21, 0,  21, 0,  19, 24, 26, 18, 26, 24, 22, 0,  21, 0,  21,            
+/*5*/   21, 0,  21, 0,  19, 24, 26, 18, 26, 24, 22, 0,  21, 0,  21,
 /*6*/   21, 0,  17, 26, 20, 0,  0,  21, 0,  0,  17, 26, 20, 0,  21,
 /*7*/   21, 0,  21, 0,  21, 0,  0,  21, 0,  0,  21, 0,  21, 0,  21,
 /*8*/   17, 26, 20, 0,  17, 26, 26, 48, 26, 26, 20, 0,  17, 26, 20,
@@ -163,10 +162,10 @@ public class Board extends JPanel implements ActionListener {
 /*14*/  21, 0,  21, 0,  0,  0,  0,  21, 0,  0,  0,  0,  21, 0,  21,
 /*15*/  57, 26, 24, 26, 26, 26, 26, 24, 26, 26, 26, 26, 24, 26, 60,
             };
-    
+
     // TODO: Agregar una forma en la que un espacio abierto en el borde te mande al otro extremo de la pantalla
-    
-    
+
+
     private final int validSpeeds[] = {1, 2, 3, 4, 6, 8};
     private final int maxSpeed = 6;
 
@@ -196,23 +195,34 @@ public class Board extends JPanel implements ActionListener {
         screenData = new short[N_BLOCKS * N_BLOCKS];
         mazeColor = new Color(5, 100, 5);
         d = new Dimension(400, 400); // esta variable solamente se usa para crear un rectangulo negro
-        // aquí se agregan los objetos fantasma al array list
-        fantasmas.add(new Fantasma(new Image[2],this,"Clyde"));
-        fantasmas.add(new Fantasma(new Image[2],this,"Blinky"));
-        fantasmas.add(new Fantasma(new Image[2],this,"Pinky"));
-        fantasmas.add(new Fantasma(new Image[2],this,"Inky"));
+        //region Inicializar Pacman
+        pacman = new Pacman(new Animation(AnimationEnum.PACMAN_NORMAL_LEFT), this, "Pacman");
+        //endregion
 
-        // Cargar las 2 imagenes que pertenecen a cada fantasma
-        int ghostPos = 0;
+        //region Inicializar fantasmas
+        // Cargar las 2 imagenes que pertenecen a cada fantasma a la animacion
+        Animation animations[] = new Animation[4];
+        for(int i = 0; i < 4; i++ ) animations[i] = new Animation(new Image[2], 5);
+        int arrPos = 0;
 
         for(GhostType ghost : GhostType.values()) {
-            Image images[] = fantasmas.get(ghostPos).getImages();
+            Image gImages[] = animations[arrPos].getImages();
             String name = ghost.name().toLowerCase();
-            images[0] = new ImageIcon("images/" + name + " v1.png").getImage();
-            images[1] = new ImageIcon("images/" + name + " v2.png").getImage();
+            gImages[0] = new ImageIcon("images/" + name + " v1.png").getImage();
+            gImages[1] = new ImageIcon("images/" + name + " v2.png").getImage();
 
-            fantasmas.get(ghostPos++).setImages(images);
+            animations[arrPos++].setImages(gImages);
         }
+
+        // aquí se agregan los objetos fantasma al array list
+        fantasmas.add(new Fantasma(new Animation(AnimationEnum.CLYDE_NORMAL_RIGHT),this,"Clyde"));
+        fantasmas.add(new Fantasma(new Animation(AnimationEnum.BLINKY_NORMAL_RIGHT),this,"Blinky"));
+        fantasmas.add(new Fantasma(new Animation(AnimationEnum.INKY_NORMAL_RIGHT),this,"Inky"));
+        fantasmas.add(new Fantasma(new Animation(AnimationEnum.PINKY_NORMAL_RIGHT),this,"Pinky"));
+        //endregion
+
+
+
         // esto agregará los fantasmas restantes según el nivel de dificultad
         // hasta llegar al máximo de fantasmas
 //        ghost_x = new int[MAX_GHOSTS];
@@ -222,7 +232,7 @@ public class Board extends JPanel implements ActionListener {
 //        ghostSpeed = new int[MAX_GHOSTS];
         dx = new int[4];
         dy = new int[4];
-        
+
         timer = new Timer(40, this);
         timer.start();
     }
@@ -234,33 +244,11 @@ public class Board extends JPanel implements ActionListener {
         initGame();
     }
 
-    private void doAnimPacman() {
-
-        pacAnimCount--;
-
-        if (pacAnimCount <= 0) {
-            pacAnimCount = PAC_ANIM_DELAY;
-            pacmanAnimPos = pacmanAnimPos + pacAnimDir;
-
-            if (pacmanAnimPos == (PACMAN_ANIM_COUNT - 1) || pacmanAnimPos == 0) {
-                pacAnimDir = -pacAnimDir;
-            }
-        }
-
-//        if (pacAnimCount <= 0) {
-//            pacAnimCount = PAC_ANIM_DELAY;
-//            pacmanAnimPos = pacmanAnimPos + pacAnimDir;
-//
-//            if (pacmanAnimPos == (PACMAN_ANIM_COUNT - 1) || pacmanAnimPos == 0) {
-//                pacAnimDir = -pacAnimDir;
-//            }
-//        }
-    }
-
     private void playGame(Graphics2D g2d){
 
         if (dying) {
-            if (pacmanAnimPosDie == 0){
+
+            if (pacman.getCurrentAnimation().getCurrentFrame() == 0){
                 Sound.SIREN.stop();
                 timer.stop();
                 try {
@@ -271,10 +259,10 @@ public class Board extends JPanel implements ActionListener {
                 timer.start();
                 Sound.PACMAN_DEATH.play();
             }
-            pacmanAnimPosDie++;
+            pacman.update();
             drawPacmanDie(g2d);
            // timer.wait(1000);
-            if (pacmanAnimPosDie == 5){
+            if (pacman.getCurrentAnimation().isFinished()){
                 death();
                 timer.stop();
                 try {
@@ -296,7 +284,7 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void showIntroScreen(Graphics2D g2d) {
-        
+
         g2d.setColor(new Color(0, 32, 48));
         g2d.fillRect(50, SCREEN_SIZE / 2 - 30, SCREEN_SIZE - 100, 50);
         g2d.setColor(Color.white);
@@ -321,8 +309,8 @@ public class Board extends JPanel implements ActionListener {
         s = "Score: " + score;
         g.drawString(s, SCREEN_SIZE / 2 + 96, SCREEN_SIZE + 16);
 
-        for (i = 0; i < pacsLeft; i++) {
-            g.drawImage(pacmanLeft[1], i * 28 + 8, SCREEN_SIZE + 1, this);
+        for (i = 0; i < pacman.getHealth(); i++) {
+            g.drawImage(new ImageIcon("images/left3.png").getImage(), i * 28 + 8, SCREEN_SIZE + 1, this);
         }
     }
 
@@ -358,9 +346,9 @@ public class Board extends JPanel implements ActionListener {
 
     private void death() {
 
-        pacsLeft--;
-        pacmanAnimPosDie = 0;
-        if (pacsLeft == 0) {
+        pacman.setHealth(pacman.getHealth() - 1);
+        pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_NORMAL_LEFT));
+        if (pacman.getHealth() == 0) {
             inGame = false;
             Sound.SIREN.stop();
         }
@@ -374,42 +362,35 @@ public class Board extends JPanel implements ActionListener {
         int pos;
         int count;
 
-        // Para enviarle el frame actual a la funcion moveGhost
-        ghostsAnimCount--;
-
-        if (ghostsAnimCount <= 0) {
-            ghostsAnimCount = GHOSTS_ANIM_DELAY;
-            ghostsAnimPos = ghostsAnimPos + ghostsAnimDir;
-
-            if (ghostsAnimPos == (GHOSTS_ANIM_COUNT - 1) || ghostsAnimPos == 0) {
-                ghostsAnimDir = -ghostsAnimDir;
-            }
-        }
+        fantasmas.get(0).update();
+        fantasmas.get(1).update();
+        fantasmas.get(2).update();
+        fantasmas.get(3).update();
 
         for (i = 0; i < N_GHOSTS; i++) {
             if (fantasmas.get(i).getPosx() % BLOCK_SIZE == 0 && fantasmas.get(i).getPosy() % BLOCK_SIZE == 0) {
                 pos = fantasmas.get(i).getPosx() / BLOCK_SIZE + N_BLOCKS * (int) (fantasmas.get(i).getPosy() / BLOCK_SIZE);
                 count = 0;
                 if (eatingGhost) {
-                    if ((screenData[pos] & 1) == 0 && fantasmas.get(i).getDirx() != 1 && fantasmas.get(i).getPosx() <= pacman_x) {
+                    if ((screenData[pos] & 1) == 0 && fantasmas.get(i).getDirx() != 1 && fantasmas.get(i).getPosx() <= pacman.getPosx()) {
                         dx[count] = -1;
                         dy[count] = 0;
                         count++;
                     }
 
-                    if ((screenData[pos] & 2) == 0 && fantasmas.get(i).getDiry() != 1 && fantasmas.get(i).getPosy() <= pacman_y) {
+                    if ((screenData[pos] & 2) == 0 && fantasmas.get(i).getDiry() != 1 && fantasmas.get(i).getPosy() <= pacman.getPosy()) {
                         dx[count] = 0;
                         dy[count] = -1;
                         count++;
                     }
 
-                    if ((screenData[pos] & 4) == 0 && fantasmas.get(i).getDirx() != -1 && fantasmas.get(i).getPosx() >= pacman_x) {
+                    if ((screenData[pos] & 4) == 0 && fantasmas.get(i).getDirx() != -1 && fantasmas.get(i).getPosx() >= pacman.getPosx()) {
                         dx[count] = 1;
                         dy[count] = 0;
                         count++;
                     }
 
-                    if ((screenData[pos] & 8) == 0 && fantasmas.get(i).getDiry() != -1 && fantasmas.get(i).getPosy() >= pacman_y) {
+                    if ((screenData[pos] & 8) == 0 && fantasmas.get(i).getDiry() != -1 && fantasmas.get(i).getPosy() >= pacman.getPosy()) {
                         dx[count] = 0;
                         dy[count] = 1;
                         count++;
@@ -446,7 +427,7 @@ public class Board extends JPanel implements ActionListener {
                         count++;
                     }
                 }
-             
+
                 if (count == 0) {
 
                     if ((screenData[pos] & 15) == 15) {
@@ -481,10 +462,26 @@ public class Board extends JPanel implements ActionListener {
             fantasmas.get(i).setPosx(fantasmas.get(i).getPosx() + (fantasmas.get(i).getDirx() * fantasmas.get(i).getSpeed()));
             //ghost_y[i] = fantasmas.get(i).getPosy() + (ghost_dy[i] * fantasmas.get(i).getSpeed());
             fantasmas.get(i).setPosy(fantasmas.get(i).getPosy() + (fantasmas.get(i).getDiry() * fantasmas.get(i).getSpeed()));
-            
             //drawGhost(g2d, fantasmas.get(i).getPosx() + 1, fantasmas.get(i).getPosy() + 1, i);
+            if (fantasmas.get(i).getEating() == false && eatingGhost == false){
+                drawGhost(g2d, i, fantasmas.get(i).getCurrentAnimation().getCurrentFrame());
+            }
+            if (fantasmas.get(i).getEating() == true){
+                drawEatenGhost(g2d,i); // si el fantasma ya está comido
+            }
+            if (fantasmas.get(i).getEating() == false && eatingGhost == true){
+                drawScaredGhost(g2d,i); // si el fantasma ya está comido
+            }
+            drawGhost(g2d, i, fantasmas.get(i).getCurrentAnimation().getCurrentFrame());
+
+            if (pacman.getPosx() > (fantasmas.get(i).getPosx() - 12) && pacman.getPosx() < (fantasmas.get(i).getPosx() + 12)
+                    && pacman.getPosy() > (fantasmas.get(i).getPosy() - 12) && pacman.getPosy() < (fantasmas.get(i).getPosy() + 12)
+                    && inGame && eatingGhost == false && fantasmas.get(i).getEating() == false ) {
+                dying = true;
+                pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_DIE));
+            }
             
-                if (fantasmas.get(i).getEating() == false && eatingGhost == false) {
+             /*   if (fantasmas.get(i).getEating() == false && eatingGhost == false) {
                     drawGhost(g2d, i, ghostsAnimPos);
                 }
                 if (fantasmas.get(i).getEating() == true) {
@@ -496,31 +493,28 @@ public class Board extends JPanel implements ActionListener {
            
             
             if (pacman_x > (fantasmas.get(i).getPosx() - 12) && pacman_x < (fantasmas.get(i).getPosx() + 12)
-                    && pacman_y > (fantasmas.get(i).getPosy() - 12) && pacman_y < (fantasmas.get(i).getPosy() + 12)
-                    && inGame && eatingGhost == false && fantasmas.get(i).getEating() == false ) {
-
-                dying = true;
-            }
-            if (pacman_x > (fantasmas.get(i).getPosx() - 12) && pacman_x < (fantasmas.get(i).getPosx() + 12)
-                    && pacman_y > (fantasmas.get(i).getPosy() - 12) && pacman_y < (fantasmas.get(i).getPosy() + 12)
+                    && pacman_y > (fantasmas.get(i).getPosy() - 12) && pacman_y < (fantasmas.get(i).getPosy() + 12) */           
+            if (pacman.getPosx() > (fantasmas.get(i).getPosx() - 12) && pacman.getPosx() < (fantasmas.get(i).getPosx() + 12)
+                    && pacman.getPosy() > (fantasmas.get(i).getPosy() - 12) && pacman.getPosy() < (fantasmas.get(i).getPosy() + 12)
                     && inGame && eatingGhost == true && fantasmas.get(i).getEating() == false ) {
 
                 Sound.GHOST_SCARED.stop();
                 Sound.GHOST_EATEN.play();
                 whatEatGhost = i;
                 fantasmas.get(i).setEating(true);
+                Sound.GHOST_SCARED.loop();
                 score = score + acumPointsEat;
                 fantasmas.get(i).setVisible(false);
             }
         }
-        
+
     }
 
     private void drawGhost(Graphics2D g2d, int i, int frame) {
         // para dibujar el fantasma se toma la imagen del objeto
-       if (fantasmas.get(i).getVisible()){
-            g2d.drawImage(fantasmas.get(i).getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
-        }//g2d.drawImage(ghost, x, y, this);
+        //g2d.drawImage(fantasmas.get(i).getCurrentAnimation().getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        g2d.drawImage(fantasmas.get(i).getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);  
+      //g2d.drawImage(ghost, x, y, this);
     }
     private void drawEatenGhost(Graphics2D g2d, int i) {
         // para dibujar el fantasma se toma la imagen del objeto
@@ -538,18 +532,22 @@ public class Board extends JPanel implements ActionListener {
     }
     private void movePacman() {
 
+        pacman.update();
         int pos;
         short ch;
-
-        if (req_dx == -pacmand_x && req_dy == -pacmand_y) {
-            pacmand_x = req_dx;
-            pacmand_y = req_dy;
-            view_dx = pacmand_x;
-            view_dy = pacmand_y;
+        boolean flag = false;
+        if (req_dx == -pacman.getDirx() && req_dy == -pacman.getDiry()) {
+            // checar si cambio la direccion
+            dirChanged = (req_dx != pacman.getDirx() || req_dy != pacman.getDiry());
+            flag = true;
+            pacman.setDirx(req_dx);
+            pacman.setDiry(req_dy);
+            view_dx = pacman.getDirx();
+            view_dy = pacman.getDiry();
         }
 
-        if (pacman_x % BLOCK_SIZE == 0 && pacman_y % BLOCK_SIZE == 0) {
-            pos = pacman_x / BLOCK_SIZE + N_BLOCKS * (int) (pacman_y / BLOCK_SIZE);
+        if (pacman.getPosx() % BLOCK_SIZE == 0 && pacman.getPosy() % BLOCK_SIZE == 0) {
+            pos = pacman.getPosx() / BLOCK_SIZE + N_BLOCKS * (int) (pacman.getPosy() / BLOCK_SIZE);
             ch = screenData[pos];
 
             if ((ch & 16) != 0) {
@@ -572,46 +570,49 @@ public class Board extends JPanel implements ActionListener {
                         || (req_dx == 1 && req_dy == 0 && (ch & 4) != 0)
                         || (req_dx == 0 && req_dy == -1 && (ch & 2) != 0)
                         || (req_dx == 0 && req_dy == 1 && (ch & 8) != 0))) {
-                    pacmand_x = req_dx;
-                    pacmand_y = req_dy;
-                    view_dx = pacmand_x;
-                    view_dy = pacmand_y;
+                    // checar si cambio la direccion
+                    if(!flag) dirChanged = ((req_dx != pacman.getDirx() || req_dy != pacman.getDiry()));
+                    pacman.setDirx(req_dx);
+                    pacman.setDiry(req_dy);
+                    view_dx = pacman.getDirx();
+                    view_dy = pacman.getDiry();
                 }
             }
 
             // Check for standstill
-            if ((pacmand_x == -1 && pacmand_y == 0 && (ch & 1) != 0)
-                    || (pacmand_x == 1 && pacmand_y == 0 && (ch & 4) != 0)
-                    || (pacmand_x == 0 && pacmand_y == -1 && (ch & 2) != 0)
-                    || (pacmand_x == 0 && pacmand_y == 1 && (ch & 8) != 0)
-                    || (pacmand_x == -1 && pacmand_y == 0 && (ch & 1) != 0)) {
-                pacmand_x = 0;
-                pacmand_y = 0;
+            if ((pacman.getDirx() == -1 && pacman.getDiry() == 0 && (ch & 1) != 0)
+                    || (pacman.getDirx() == 1 && pacman.getDiry() == 0 && (ch & 4) != 0)
+                    || (pacman.getDirx() == 0 && pacman.getDiry() == -1 && (ch & 2) != 0)
+                    || (pacman.getDirx() == 0 && pacman.getDiry() == 1 && (ch & 8) != 0)
+                    || (pacman.getDirx() == -1 && pacman.getDiry() == 0 && (ch & 1) != 0)) {
+                pacman.setDirx(0);
+                pacman.setDiry(0);
             }
         }
-        pacman_x = pacman_x + PACMAN_SPEED * pacmand_x;
-        pacman_y = pacman_y + PACMAN_SPEED * pacmand_y;
+        pacman.setPosx(pacman.getPosx() + PACMAN_SPEED * pacman.getDirx());
+        pacman.setPosy(pacman.getPosy() + PACMAN_SPEED * pacman.getDiry());
     }
 
+    // dibujar a pacman
     private void drawPacman(Graphics2D g2d) {
-        Image pacmanImgs[];
-        
-          
-        if (whatEatGhost == -1) {
+        //TODO: Recordar el frame en que se quedo la animacion
+        if(dirChanged) {
+            int frame = pacman.getCurrentAnimation().getCurrentFrame();
+          if (whatEatGhost == -1) { 
             if (view_dx == -1) {
-                pacmanImgs = pacmanLeft;
+                pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_NORMAL_LEFT));
             } else if (view_dx == 1) {
-                pacmanImgs = pacmanRight;
+                pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_NORMAL_RIGHT));
             } else if (view_dy == -1) {
-                pacmanImgs = pacmanUp;
+                pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_NORMAL_UP));
             } else {
-                pacmanImgs = pacmanDown;
+                pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_NORMAL_DOWN));
             }
-
-            Image img = pacmanAnimPos == 0 ? pacman1 : pacmanImgs[pacmanAnimPos - 1];
-            g2d.drawImage(img, pacman_x + 1, pacman_y + 1, this);
-        }
-        else{
+          }
+        g2d.drawImage(pacman.getCurrentAnimation().getImages()[pacman.getCurrentAnimation().getCurrentFrame()],
+                pacman.getPosx() + 1 , pacman.getPosy() + 1 , this);
+       }
+       else{
             if (pacmanAnimPoints <= 6){
                 pacmanAnimPoints++;
                 g2d.drawString(String.valueOf(acumPointsEat), pacman_x+2, pacman_y+14);
@@ -633,23 +634,10 @@ public class Board extends JPanel implements ActionListener {
             
           
         }
-        
     }
     // este método hace la animación de cuando Pacman muere
-     private void drawPacmanDie(Graphics2D g2d) {
-        Image pacmanImgs[];
-        if (view_dx == -1) {
-            pacmanImgs = pacmanLeftDie;
-        } else if (view_dx == 1) {
-            pacmanImgs = pacmanLeftDie;
-        } else if (view_dy == -1) {
-            pacmanImgs = pacmanLeftDie;
-        } else {
-            pacmanImgs = pacmanLeftDie;
-        }
-
-        Image img = pacmanImgs[pacmanAnimPosDie];
-        g2d.drawImage(img, pacman_x + 1 , pacman_y + 1 , this);
+    private void drawPacmanDie(Graphics2D g2d) {
+        g2d.drawImage(pacman.getCurrentAnimation().getImages()[pacman.getCurrentAnimation().getCurrentFrame()], pacman.getPosx() + 1 , pacman.getPosy() + 1 , this);
     }
     private void drawMaze(Graphics2D g2d) {
 
@@ -684,20 +672,20 @@ public class Board extends JPanel implements ActionListener {
                     g2d.setColor(dotColor);
                     g2d.fillRect(x + 11, y + 11, 2, 2);
                 }
-                
+
                 // Dibuja el cuadro de poder de super pacman
                 if ((screenData[i] & 32) != 0) {
                     g2d.setColor(dotColor);
                     g2d.fillRect(x + 5, y + 5, 8, 8);
                 }
-                
+
                 i++;
             }
         }
     }
 
     private void initGame() {
-        pacsLeft = 3;
+        pacman.setHealth(3);
         score = 0;
         initLevel();
         N_GHOSTS = 4;
@@ -732,26 +720,11 @@ public class Board extends JPanel implements ActionListener {
             oFantasma.setSpeed(validSpeeds[random]);
             oFantasma.setEating(false);
         }
-        
-//        for (i = 0; i < N_GHOSTS; i++) {
-//            ghost_y[i] = 4 * BLOCK_SIZE;
-//            ghost_x[i] = 4 * BLOCK_SIZE;
-//            ghost_dy[i] = 0;
-//            ghost_dx[i] = dx;
-//            dx = -dx;
-//            random = (int) (Math.random() * (currentSpeed + 1));
-//
-//            if (random > currentSpeed) {
-//                random = currentSpeed;
-//            }
-//
-//            ghostSpeed[i] = validSpeeds[random];
-//        }
 
-        pacman_x = 7 * BLOCK_SIZE;
-        pacman_y = 10 * BLOCK_SIZE;
-        pacmand_x = 0;
-        pacmand_y = 0;
+        pacman.setPosx(7 * BLOCK_SIZE);
+        pacman.setPosy(10 * BLOCK_SIZE);
+        pacman.setDirx(0);
+        pacman.setDiry(0);
         req_dx = 0;
         req_dy = 0;
         view_dx = -1;
@@ -763,27 +736,8 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void loadImages() {
-//        ghost = new ImageIcon("images/ghost.png").getImage();
-//        clydeGhost= new ImageIcon("images/clyde v1.png").getImage(); // carga la imagen para este tipo de fastasma
-//        blinkyGhost = new ImageIcon("images/blinky v1.png").getImage();
-//        inkyGhost = new ImageIcon("images/inky v1.png").getImage();
-//        pinkyGhost = new ImageIcon("images/pinky v1.png").getImage();
-        pacman1 = new ImageIcon("images/pacman.png").getImage();
         ghostEyes = new ImageIcon("images/ghost eyes.png").getImage();
         ghostScared = new ImageIcon("images/ghost scared.png").getImage();
-        for(int i = 0; i < 3; i++) {
-            int n = i+1;
-            pacmanUp[i] = new ImageIcon("images/up" + n + ".png").getImage();
-            pacmanRight[i] = new ImageIcon("images/right" + n + ".png").getImage();
-            pacmanDown[i] = new ImageIcon("images/down" + n + ".png").getImage();
-            pacmanLeft[i] = new ImageIcon("images/left" + n + ".png").getImage();
-        }
-     
-        for(int i = 0; i < 6; i++) {
-            int n = i+1;
-            pacmanLeftDie[i] = new ImageIcon("images/leftdie" + n + ".png").getImage();
-        }
-        
     }
 
     @Override
@@ -802,7 +756,6 @@ public class Board extends JPanel implements ActionListener {
 
         drawMaze(g2d);
         drawScore(g2d);
-        doAnimPacman();
 
         if (inGame) {
             playGame(g2d);
