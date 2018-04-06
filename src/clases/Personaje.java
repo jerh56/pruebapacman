@@ -15,10 +15,12 @@ public class Personaje {
     private int posy;
     private int diry;
     private int speed;
+    private boolean visible;
     public Personaje(Animation animation, Board tablero, String name){
         this.currentAnimation = animation;
         this.tablero = tablero;
         this.name = name;
+        this.visible = true;
     }
 
     public void update() {
@@ -42,7 +44,9 @@ public class Personaje {
     public void setCurrentAnimation(Animation animation) {
         this.currentAnimation = animation;
     }
-
+    public void setVisible(boolean visible){
+        this.visible = visible;
+    }
     public int getPosx(){
         return this.posx;
     }
@@ -60,5 +64,11 @@ public class Personaje {
     }
     public Animation getCurrentAnimation() {
         return this.currentAnimation;
+    }
+    public boolean getVisible(){
+        return this.visible;
+    }
+    public String getName(){
+        return this.name;
     }
 }

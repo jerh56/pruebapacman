@@ -41,6 +41,7 @@ public class Board extends JPanel implements ActionListener {
     private boolean inGame = false;
     private boolean eatingGhost = false;
     private boolean dying = false;
+    
 
     private final int BLOCK_SIZE = 24;
     private final int N_BLOCKS = 15;
@@ -50,11 +51,36 @@ public class Board extends JPanel implements ActionListener {
 
     private int superPacmanCount = 0;
     private boolean dirChanged = false;
+    private final int POINTS_EAT_GHOST = 200;
+
+    //private int pacAnimCount = PAC_ANIM_DELAY;
+    //private int ghostsAnimCount = GHOSTS_ANIM_COUNT;
+    //private int pacAnimDir = 1;
+    //private int ghostsAnimDir = 1;
+    //private int pacmanAnimPos = 0;
+    //private int pacmanAnimPosDie = 0; // para animar cuando pacman muere
+    //private int pacmanAnimPoints = 0;
+    //private int ghostsAnimPos = 0; // Para animar los fantasmas
+
     private int N_GHOSTS = 4;
     private int score;
     private int[] dx, dy;
     private Pacman pacman;
     private ArrayList <Fantasma> fantasmas = new ArrayList<>(); // array list para crear los objetos Fantasma
+    private int acumPointsEat = 0;
+    private int whatEatGhost = -1;
+/////    private Image ghost; //imagen png del fantasma
+////    private Image clydeGhost;
+////    private Image blinkyGhost;
+////    private Image inkyGhost;
+////    private Image pinkyGhost;
+//    private Image[] pacmanUp = new Image[3];
+//    private Image[] pacmanRight = new Image[3];
+//    private Image[] pacmanDown = new Image[3];
+//    private Image[] pacmanLeft = new Image[3];
+//    private Image[] pacmanLeftDie = new Image[6];
+//    private Image pacman1;
+
     private Image ghostEyes;
     private Image ghostScared;
 
@@ -120,7 +146,7 @@ public class Board extends JPanel implements ActionListener {
 
     private final short levelData2[] = {
 //      1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
-/*1*/   51, 26, 18, 26, 26, 26, 26, 18, 26, 26, 26, 26, 18, 26, 54,
+/*1*/   51, 10, 18, 26, 26, 26, 26, 18, 26, 26, 26, 26, 18, 26, 54,
 /*2*/   21, 0,  21, 0,  0,  0,  0,  21, 0,  0,  0,  0,  21, 0,  21,
 /*3*/   17, 26, 16, 26, 26, 18, 26, 24, 26, 18, 26, 26, 16, 26, 20,
 /*4*/   21, 0,  21, 0,  0,  21, 0,  0,  0,  21, 0,  0,  21, 0,  21,
@@ -248,8 +274,9 @@ public class Board extends JPanel implements ActionListener {
                 Sound.SIREN.loop();
             }
         } else {
-
-            movePacman();
+            if (whatEatGhost == -1){
+                 movePacman();
+            }
             drawPacman(g2d);
             moveGhosts(g2d);
             checkMaze();
@@ -435,7 +462,6 @@ public class Board extends JPanel implements ActionListener {
             fantasmas.get(i).setPosx(fantasmas.get(i).getPosx() + (fantasmas.get(i).getDirx() * fantasmas.get(i).getSpeed()));
             //ghost_y[i] = fantasmas.get(i).getPosy() + (ghost_dy[i] * fantasmas.get(i).getSpeed());
             fantasmas.get(i).setPosy(fantasmas.get(i).getPosy() + (fantasmas.get(i).getDiry() * fantasmas.get(i).getSpeed()));
-
             //drawGhost(g2d, fantasmas.get(i).getPosx() + 1, fantasmas.get(i).getPosy() + 1, i);
             if (fantasmas.get(i).getEating() == false && eatingGhost == false){
                 drawGhost(g2d, i, fantasmas.get(i).getCurrentAnimation().getCurrentFrame());
@@ -451,27 +477,34 @@ public class Board extends JPanel implements ActionListener {
             if (pacman.getPosx() > (fantasmas.get(i).getPosx() - 12) && pacman.getPosx() < (fantasmas.get(i).getPosx() + 12)
                     && pacman.getPosy() > (fantasmas.get(i).getPosy() - 12) && pacman.getPosy() < (fantasmas.get(i).getPosy() + 12)
                     && inGame && eatingGhost == false && fantasmas.get(i).getEating() == false ) {
-
                 dying = true;
                 pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_DIE));
             }
+            
+             /*   if (fantasmas.get(i).getEating() == false && eatingGhost == false) {
+                    drawGhost(g2d, i, ghostsAnimPos);
+                }
+                if (fantasmas.get(i).getEating() == true) {
+                    drawEatenGhost(g2d, i); // si el fantasma ya está comido
+                }
+                if (fantasmas.get(i).getEating() == false && eatingGhost == true) {
+                    drawScaredGhost(g2d, i); // si el fantasma ya está comido
+                }
+           
+            
+            if (pacman_x > (fantasmas.get(i).getPosx() - 12) && pacman_x < (fantasmas.get(i).getPosx() + 12)
+                    && pacman_y > (fantasmas.get(i).getPosy() - 12) && pacman_y < (fantasmas.get(i).getPosy() + 12) */           
             if (pacman.getPosx() > (fantasmas.get(i).getPosx() - 12) && pacman.getPosx() < (fantasmas.get(i).getPosx() + 12)
                     && pacman.getPosy() > (fantasmas.get(i).getPosy() - 12) && pacman.getPosy() < (fantasmas.get(i).getPosy() + 12)
                     && inGame && eatingGhost == true && fantasmas.get(i).getEating() == false ) {
 
-                timer.stop();
                 Sound.GHOST_SCARED.stop();
                 Sound.GHOST_EATEN.play();
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                timer.start();
+                whatEatGhost = i;
                 fantasmas.get(i).setEating(true);
                 Sound.GHOST_SCARED.loop();
-
-
+                score = score + acumPointsEat;
+                fantasmas.get(i).setVisible(false);
             }
         }
 
@@ -479,17 +512,22 @@ public class Board extends JPanel implements ActionListener {
 
     private void drawGhost(Graphics2D g2d, int i, int frame) {
         // para dibujar el fantasma se toma la imagen del objeto
-        g2d.drawImage(fantasmas.get(i).getCurrentAnimation().getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
-        //g2d.drawImage(ghost, x, y, this);
+        //g2d.drawImage(fantasmas.get(i).getCurrentAnimation().getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        g2d.drawImage(fantasmas.get(i).getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);  
+      //g2d.drawImage(ghost, x, y, this);
     }
     private void drawEatenGhost(Graphics2D g2d, int i) {
         // para dibujar el fantasma se toma la imagen del objeto
-        g2d.drawImage(ghostEyes, fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        if (fantasmas.get(i).getVisible()){
+            g2d.drawImage(ghostEyes, fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        }
         //g2d.drawImage(ghost, x, y, this);
     }
     private void drawScaredGhost(Graphics2D g2d, int i) {
         // para dibujar el fantasma se toma la imagen del objeto
-        g2d.drawImage(ghostScared, fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        if (fantasmas.get(i).getVisible()){
+            g2d.drawImage(ghostScared, fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
+        }
         //g2d.drawImage(ghost, x, y, this);
     }
     private void movePacman() {
@@ -523,6 +561,7 @@ public class Board extends JPanel implements ActionListener {
                 score = score + 10;
                 superPacmanCount = 0;
                 eatingGhost = true;
+                acumPointsEat = 200;
                 Sound.GHOST_SCARED.loop();
             }
 
@@ -559,7 +598,7 @@ public class Board extends JPanel implements ActionListener {
         //TODO: Recordar el frame en que se quedo la animacion
         if(dirChanged) {
             int frame = pacman.getCurrentAnimation().getCurrentFrame();
-
+          if (whatEatGhost == -1) { 
             if (view_dx == -1) {
                 pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_NORMAL_LEFT));
             } else if (view_dx == 1) {
@@ -569,13 +608,35 @@ public class Board extends JPanel implements ActionListener {
             } else {
                 pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_NORMAL_DOWN));
             }
-        }
-
+          }
         g2d.drawImage(pacman.getCurrentAnimation().getImages()[pacman.getCurrentAnimation().getCurrentFrame()],
                 pacman.getPosx() + 1 , pacman.getPosy() + 1 , this);
+       }
+       else{
+            if (pacmanAnimPoints <= 6){
+                pacmanAnimPoints++;
+                g2d.drawString(String.valueOf(acumPointsEat), pacman_x+2, pacman_y+14);
+            }
+            else{
+                pacmanAnimPoints = 0;
+                timer.stop();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                timer.start();
+                fantasmas.get(whatEatGhost).setVisible(true);
+                whatEatGhost = -1;
+                acumPointsEat = acumPointsEat + POINTS_EAT_GHOST;
+                Sound.GHOST_SCARED.loop();
+            }
+            
+          
+        }
     }
     // este método hace la animación de cuando Pacman muere
-     private void drawPacmanDie(Graphics2D g2d) {
+    private void drawPacmanDie(Graphics2D g2d) {
         g2d.drawImage(pacman.getCurrentAnimation().getImages()[pacman.getCurrentAnimation().getCurrentFrame()], pacman.getPosx() + 1 , pacman.getPosy() + 1 , this);
     }
     private void drawMaze(Graphics2D g2d) {
