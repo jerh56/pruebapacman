@@ -84,6 +84,7 @@ public class Board extends JPanel implements ActionListener {
 
     private Image ghostEyes;
     private Image ghostScared;
+    private Image fruit;
 
     // Descripción de la variables:
     // pacman.getPosx(), pacman.getPosy() son las posiciones en los dos ejes
@@ -147,7 +148,7 @@ public class Board extends JPanel implements ActionListener {
 
     private final short levelData2[] = {
 //      1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
-/*1*/   51, 10, 18, 26, 26, 26, 26, 18, 26, 26, 26, 26, 18, 26, 54,
+/*1*/   35, 26, 18, 26, 26, 26, 26, 18, 26, 26, 26, 26, 18, 26, 54,
 /*2*/   21, 0,  21, 0,  0,  0,  0,  21, 0,  0,  0,  0,  21, 0,  21,
 /*3*/   17, 26, 16, 26, 26, 18, 26, 24, 26, 18, 26, 26, 16, 26, 20,
 /*4*/   21, 0,  21, 0,  0,  21, 0,  0,  0,  21, 0,  0,  21, 0,  21,
@@ -159,7 +160,7 @@ public class Board extends JPanel implements ActionListener {
 /*10*/  21, 0,  17, 26, 20, 0,  0,  21, 0,  0,  17, 26, 20, 0,  21,
 /*11*/  21, 0,  21, 0,  25, 18, 26, 24, 26, 18, 28, 0,  21, 0,  21,
 /*12*/  21, 0,  21, 0,  0,  21, 0,  0,  0,  21, 0,  0,  21, 0,  21,
-/*13*/  17, 26, 16, 26, 26, 24, 26, 18, 26, 24, 26, 26, 16, 26, 20,
+/*13*/  17, 26, 16, 26, 26, 24, 26, 66, 26, 24, 26, 26, 16, 26, 20,
 /*14*/  21, 0,  21, 0,  0,  0,  0,  21, 0,  0,  0,  0,  21, 0,  21,
 /*15*/  57, 26, 24, 26, 26, 26, 26, 24, 26, 26, 26, 26, 24, 26, 60,
             };
@@ -583,6 +584,14 @@ public class Board extends JPanel implements ActionListener {
                 acumPointsEat = 200;
                 Sound.GHOST_SCARED.loop();
             }
+            
+            // Si se come una fruta
+            if ((ch & 64) != 0) {
+               screenData[pos] = (short) (ch & 15);
+               score += 200;
+               Sound.PACMAN_MUNCH.play();
+               // TODO: Poner sonido cuando se come una fruta
+            }
 
             if (req_dx != 0 || req_dy != 0) {
                 if (!((req_dx == -1 && req_dy == 0 && (ch & 1) != 0)
@@ -698,6 +707,12 @@ public class Board extends JPanel implements ActionListener {
                     g2d.setColor(dotColor);
                     g2d.fillRect(x + 5, y + 5, 8, 8);
                 }
+                // Dibuja el cuadro de poder de super pacman
+                if ((screenData[i] & 64) != 0) {
+                    //g2d.setColor(dotColor);
+                    //g2d.fillRect(x + 2, y + 2, 12, 12);
+                    g2d.drawImage(fruit, x + 3 , y + 3 , this);
+                }
 
                 i++;
             }
@@ -758,6 +773,7 @@ public class Board extends JPanel implements ActionListener {
     private void loadImages() {
         ghostEyes = new ImageIcon("images/ghost eyes.png").getImage();
         ghostScared = new ImageIcon("images/ghost scared.png").getImage();
+        fruit = new ImageIcon("images/ceresa.png").getImage();
     }
 
     @Override
