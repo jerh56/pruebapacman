@@ -357,12 +357,11 @@ public class Board extends JPanel implements ActionListener {
         continueLevel();
     }
 
-    private void moveGhosts(Graphics2D g2d) {
-
+  private void moveGhosts(Graphics2D g2d) {
         short i;
         int pos;
         int count;
-
+        int currentDirX = -1;
         fantasmas.get(0).update();
         fantasmas.get(1).update();
         fantasmas.get(2).update();
@@ -450,7 +449,10 @@ public class Board extends JPanel implements ActionListener {
                     if (count > 3) {
                         count = 3;
                     }
-
+                    // Se guarda la dirección horizonta (x) actual del fantasma
+                    // para saber si no ha cambiado desde la última vez
+                    // esto permite que no se pierda la animación
+                    currentDirX = fantasmas.get(i).getDirx();
                     //ghost_dx[i] = dx[count];
                     fantasmas.get(i).setDirx(dx[count]);
                     //ghost_dy[i] = dy[count];
@@ -460,6 +462,42 @@ public class Board extends JPanel implements ActionListener {
             }
             fantasmas.get(i).setPosx(fantasmas.get(i).getPosx() + (fantasmas.get(i).getDirx() * fantasmas.get(i).getSpeed()));
             fantasmas.get(i).setPosy(fantasmas.get(i).getPosy() + (fantasmas.get(i).getDiry() * fantasmas.get(i).getSpeed()));
+            if (fantasmas.get(i).getDirx() != currentDirX && fantasmas.get(i).getDirx() != 0) { // se revisa si no ha cambiado de dirección o está detenido el fantasma
+                if (fantasmas.get(i).getDirx() == -1) {  // Si la dirección es IZQ
+                    switch (i) {
+                        case 0:
+                            fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.CLYDE_NORMAL_LEFT));
+                            break;
+                        case 1:
+                            fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.BLINKY_NORMAL_LEFT));
+                            break;
+                        case 2:
+                            fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.INKY_NORMAL_LEFT));
+                            break;
+                        case 3:
+                            fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.PINKY_NORMAL_LEFT));
+                            break;
+                    }
+
+                } else {
+                    // si no es DER 
+                    switch (i) {
+                        case 0:
+                            fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.CLYDE_NORMAL_RIGHT));
+                            break;
+                        case 1:
+                            fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.BLINKY_NORMAL_RIGHT));
+                            break;
+                        case 2:
+                            fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.INKY_NORMAL_RIGHT));
+                            break;
+                        case 3:
+                            fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.PINKY_NORMAL_RIGHT));
+                            break;
+                    }
+
+                }
+            }                
             if (fantasmas.get(i).getEating() == false && eatingGhost == false){
                 drawGhost(g2d, i, fantasmas.get(i).getCurrentAnimation().getCurrentFrame());
             }
@@ -490,7 +528,7 @@ public class Board extends JPanel implements ActionListener {
         }
 
     }
-
+  
     private void drawGhost(Graphics2D g2d, int i, int frame) {
         // para dibujar el fantasma se toma la imagen del objeto
         g2d.drawImage(fantasmas.get(i).getCurrentAnimation().getImages()[frame], fantasmas.get(i).getPosx(), fantasmas.get(i).getPosy(), this);
