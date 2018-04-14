@@ -484,7 +484,7 @@ public class Board extends JPanel implements ActionListener {
                 } else {
 
                     count = (int) (Math.random() * count);
-
+                    
                     if (count > 3) {
                         count = 3;
                     }
@@ -537,29 +537,29 @@ public class Board extends JPanel implements ActionListener {
 
                 }
             }                
-            if (fantasmas.get(i).getEating() == false && eatingGhost == false){
+            if (fantasmas.get(i).getEaten() == false && eatingGhost == false){
                 drawGhost(g2d, i, fantasmas.get(i).getCurrentAnimation().getCurrentFrame());
             }
-            if (fantasmas.get(i).getEating() == true){
+            if (fantasmas.get(i).getEaten() == true){
                 drawEatenGhost(g2d,i); // si el fantasma ya está comido
             }
-            if (fantasmas.get(i).getEating() == false && eatingGhost == true){
+            if (fantasmas.get(i).getEaten() == false && eatingGhost == true){
                 drawScaredGhost(g2d,i); // si el fantasma ya está comido
             }
             if (pacman.getPosx() > (fantasmas.get(i).getPosx() - 12) && pacman.getPosx() < (fantasmas.get(i).getPosx() + 12)
                     && pacman.getPosy() > (fantasmas.get(i).getPosy() - 12) && pacman.getPosy() < (fantasmas.get(i).getPosy() + 12)
-                    && inGame && eatingGhost == false && fantasmas.get(i).getEating() == false ) {
+                    && inGame && eatingGhost == false && fantasmas.get(i).getEaten() == false ) {
                 dying = true;
                 pacman.setCurrentAnimation(new Animation(AnimationEnum.PACMAN_DIE));
             }
             if (pacman.getPosx() > (fantasmas.get(i).getPosx() - 12) && pacman.getPosx() < (fantasmas.get(i).getPosx() + 12)
                     && pacman.getPosy() > (fantasmas.get(i).getPosy() - 12) && pacman.getPosy() < (fantasmas.get(i).getPosy() + 12)
-                    && inGame && eatingGhost == true && fantasmas.get(i).getEating() == false ) {
+                    && inGame && eatingGhost == true && fantasmas.get(i).getEaten() == false ) {
 
                 Sound.GHOST_SCARED.stop();
                 Sound.GHOST_EATEN.play();
                 whatEatGhost = i;
-                fantasmas.get(i).setEating(true);
+                fantasmas.get(i).setEaten(true);
                 Sound.GHOST_SCARED.loop();
                 score = score + acumPointsEat;
                 fantasmas.get(i).setVisible(false);
@@ -781,8 +781,9 @@ public class Board extends JPanel implements ActionListener {
         int random;
          // se configuran los fantasmas del array list
         for (Fantasma oFantasma : fantasmas) {
-            oFantasma.setPosx(4 * BLOCK_SIZE);
-            oFantasma.setPosy(4 * BLOCK_SIZE);
+            // Ubicación Spawn
+            oFantasma.setPosx(7 * BLOCK_SIZE);
+            oFantasma.setPosy(12 * BLOCK_SIZE);
             oFantasma.setDiry(0);
             oFantasma.setDirx(dx);
             dx = -dx;
@@ -791,7 +792,7 @@ public class Board extends JPanel implements ActionListener {
                 random = currentSpeed;
             }
             oFantasma.setSpeed(validSpeeds[random]);
-            oFantasma.setEating(false);
+            oFantasma.setEaten(false);
         }
 
         pacman.setPosx(7 * BLOCK_SIZE);
@@ -873,7 +874,7 @@ public class Board extends JPanel implements ActionListener {
                 }
             } else {
                 if (key == 's' || key == 'S') {
-                    Sound.PACMAN_BEGINNING.play();
+                    //Sound.PACMAN_BEGINNING.play();
                     inGame = true;
                     initGame();
                     Sound.SIREN.loop(); // inicia a sonar la sirena del juego
