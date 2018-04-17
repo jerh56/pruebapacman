@@ -47,7 +47,7 @@ public class Board extends JPanel implements ActionListener {
     private final int N_BLOCKS = 15;
     private final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
     private final int MAX_GHOSTS = 4; // TODO: Aumentar la cantidad de fantasmas
-    private final int PACMAN_SPEED = 6;
+    private final int PACMAN_SPEED = 4;
 
     private int superPacmanCount = 0;
     private int pacmanAnimPoints = 0;
