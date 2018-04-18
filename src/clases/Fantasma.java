@@ -7,18 +7,18 @@ import pruebapacman.Board;
  * @author mac
  */
 public class Fantasma extends Personaje{
-    private boolean eating;
+    private boolean eaten;
 
     public Fantasma(Animation animation, Board tablero, String name) {
         super(animation, tablero, name);
-        this.eating = false;
+        this.eaten = false;
     }
 
-    public void setEating(boolean eating){
-        this.eating = eating;
+    public void setEaten(boolean eating){
+        this.eaten = eating;
     }
-    public boolean getEating(){
-        return this.eating;
+    public boolean getEaten(){
+        return this.eaten;
     }
     
 }
