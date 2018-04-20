@@ -291,7 +291,7 @@ public class Board extends JPanel implements ActionListener {
                     Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 timer.start();
-                Sound.PACMAN_DEATH.play();
+                Sound.PACMAN_DEATH.play(false);
             }
             pacman.update();
             drawPacmanDie(g2d);
@@ -305,7 +305,7 @@ public class Board extends JPanel implements ActionListener {
                     Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 timer.start();
-                Sound.SIREN.loop();
+                Sound.SIREN.play(true);
             }
         } else {
             if (whatEatGhost == -1){
@@ -554,11 +554,11 @@ public class Board extends JPanel implements ActionListener {
                     && inGame && eatingGhost == true && fantasmas.get(i).getEaten() == false ) {
 
                 Sound.GHOST_SCARED.stop();
-                Sound.GHOST_EATEN.play();
+                Sound.GHOST_EATEN.play(false);
                 whatEatGhost = i;
                 fantasmas.get(i).setEaten(true);
                 fantasmas.get(i).setCurrentAnimation(new Animation(AnimationEnum.GHOST_EATEN));
-                Sound.GHOST_SCARED.loop();
+                Sound.GHOST_SCARED.play(true);
                 score = score + acumPointsEat;
                 fantasmas.get(i).setVisible(false);
             }
@@ -596,7 +596,7 @@ public class Board extends JPanel implements ActionListener {
             if ((ch & 16) != 0) {
                 screenData[pos] = (short) (ch & 15);
                 score++;
-                Sound.PACMAN_MUNCH.play();
+                Sound.PACMAN_MUNCH.play(false);
             }
             // si se come el cuadro de super poder
             if ((ch & 32) != 0) {
@@ -610,15 +610,14 @@ public class Board extends JPanel implements ActionListener {
                 superPacmanCount = 0;
                 eatingGhost = true;
                 acumPointsEat = 200;
-                Sound.GHOST_SCARED.loop();
+                Sound.GHOST_SCARED.play(true);
             }
             
             // Si se come una fruta
             if ((ch & 64) != 0) {
                screenData[pos] = (short) (ch & 15);
                score += 200;
-               Sound.PACMAN_MUNCH.play();
-               // TODO: Poner sonido cuando se come una fruta
+               Sound.PACMAN_MUNCH.play(false);
             }
 
             if (req_dx != 0 || req_dy != 0) {
@@ -686,7 +685,7 @@ public class Board extends JPanel implements ActionListener {
                 fantasmas.get(whatEatGhost).setVisible(true);
                 whatEatGhost = -1;
                 acumPointsEat = acumPointsEat + POINTS_EAT_GHOST;
-                Sound.GHOST_SCARED.loop();
+                Sound.GHOST_SCARED.play(true);
             }
             
           
@@ -862,10 +861,10 @@ public class Board extends JPanel implements ActionListener {
                 }
             } else {
                 if (key == 's' || key == 'S') {
-                    Sound.PACMAN_BEGINNING.play();
+                    Sound.PACMAN_BEGINNING.play(false);
                     inGame = true;
                     initGame();
-                    Sound.SIREN.loop(); // inicia a sonar la sirena del juego
+                    Sound.SIREN.play(true); // inicia a sonar la sirena del juego
                 }
             }
         }
