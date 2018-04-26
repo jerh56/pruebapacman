@@ -573,7 +573,9 @@ public class Board extends JPanel implements ActionListener {
                 Sound.GHOST_EATEN.play();
                 whatEatGhost = i;
                 fantasmas.get(i).setEaten(true);
-                fantasmas.get(i).setPath(screenData, fantasmas.get(i).getPosx() / BLOCK_SIZE, fantasmas.get(i).getPosy() / BLOCK_SIZE, 14, 0, N_BLOCKS);
+                short[] screenDataCopy = new short[N_BLOCKS * N_BLOCKS];
+                System.arraycopy(screenData,0, screenDataCopy,0, N_BLOCKS * N_BLOCKS); // Se copia el arreglo para no afectar a ScreenData con las modificaciones
+                fantasmas.get(i).setPath(screenDataCopy, fantasmas.get(i).getPosx() / BLOCK_SIZE, fantasmas.get(i).getPosy() / BLOCK_SIZE, 14, 0, N_BLOCKS, BLOCK_SIZE);
 
                 //  pos = fantasmas.get(i).getPosx() / BLOCK_SIZE + N_BLOCKS * (int) (fantasmas.get(i).getPosy() / BLOCK_SIZE);
                 //SearchPath.depthPath(screenData, fantasmas.get(i).getPosx() / BLOCK_SIZE, fantasmas.get(i).getPosy() / BLOCK_SIZE, 14,0, path, path2, path3, N_BLOCKS);
@@ -583,6 +585,7 @@ public class Board extends JPanel implements ActionListener {
                 Sound.GHOST_SCARED.loop();
                 score = score + acumPointsEat;
                 fantasmas.get(i).setVisible(false);
+                return;
             }
         }
 

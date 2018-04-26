@@ -15,7 +15,7 @@ public class Fantasma extends Personaje{
     private final List<Integer> path2 = new ArrayList<Integer>();
     private final List<Integer> path3 = new ArrayList<Integer>();
     private int idPos;
-
+   
     public Fantasma(Animation animation, Board tablero, String name) {
         super(animation, tablero, name);
         this.eaten = false;
@@ -25,9 +25,11 @@ public class Fantasma extends Personaje{
     public void setEaten(boolean eaten){
         this.eaten = eaten;
     }
-    public void setPath(short [] maze, int x, int y, int xdest, int ydest, int N_BLOCKS){
+    public void setPath(short[] maze, int x, int y, int xdest, int ydest, int N_BLOCKS, int BLOCK_SIZE){
         SearchPath.depthPath(maze,x, y, xdest,ydest, path2, path3, this.path, N_BLOCKS);
         this.idPos = this.path.size() - 1;
+        this.setPosx(path2.get(path2.size()-2) * BLOCK_SIZE);
+        this.setPosy(path2.get(path2.size()-1) * BLOCK_SIZE);
         //System.out.println(this.path);
     }
     public boolean getEaten(){
@@ -47,5 +49,4 @@ public class Fantasma extends Personaje{
         }
         return xymove;
     }
-                  
 }

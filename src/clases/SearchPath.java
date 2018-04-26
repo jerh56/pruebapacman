@@ -11,7 +11,7 @@ import java.util.List;
  * @author mac
  */
 public class SearchPath {
-    public static boolean depthPath(short [] maze, int x, int y, int xdest, int ydest, List<Integer> path, List<Integer> path2, List<Integer> path3, int N_BLOCKS) {
+    public static boolean depthPath(short[] maze, int x, int y, int xdest, int ydest, List<Integer> path, List<Integer> path2, List<Integer> path3, int N_BLOCKS) {
         if (x < 0 || y < 0) {
             return false;
         }
@@ -26,8 +26,8 @@ public class SearchPath {
             path.add(x);
             path.add(y);
             path2.add(pos);
-            path.add(0);
-            path.add(0);
+            path3.add(0);
+            path3.add(0);
             return true;
         }
         // fue visitado la posición
@@ -52,7 +52,7 @@ public class SearchPath {
             if ((maze[pos] & 4) == 0) {
                 dx = 1;
                 dy = 0;
-                if (depthPath(maze, x + dx, y + dy,xdest, ydest, path, path2 , path3, N_BLOCKS)) {
+                if (depthPath(maze, x + dx, y + dy, xdest, ydest, path, path2 , path3, N_BLOCKS)) {
                     path.add(x);
                     path.add(y);
                     path2.add(pos);
